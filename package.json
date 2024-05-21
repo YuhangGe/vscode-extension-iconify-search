@@ -1,0 +1,45 @@
+{
+	"name": "iconify-search",
+	"displayName": "Iconify Search",
+	"description": "Search and Insert Iconify Icons in VS Code",
+	"version": "0.0.1",
+	"publisher": "abeyuhang",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/YuhangGe/vscode-extension-iconify-search"
+	},
+	"engines": {
+		"vscode": "^1.73.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:iconify.search"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "iconify.search",
+				"title": "Iconify: Search & Insert"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint \"src/**/*.ts\"",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^18.19.33",
+		"@types/vscode": "^1.89.0",
+		"@typescript-eslint/eslint-plugin": "^6.21.0",
+		"@typescript-eslint/parser": "^6.21.0",
+		"eslint": "^8.57.0",
+		"typescript": "^5.4.5"
+	}
+}
