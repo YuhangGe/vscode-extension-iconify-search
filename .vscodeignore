@@ -1,6 +1,7 @@
 .vscode/**
 out/**/*.map
 src/**
+scripts/**
 .gitignore
 tsconfig.json
 tslint.json
