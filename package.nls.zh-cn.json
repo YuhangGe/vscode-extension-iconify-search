@@ -1,0 +1,5 @@
+{
+  "iconifyView.name": "搜索 Iconify 图标",
+  "iconifySearch.title": "搜索并插入图标",
+  "settings.favorites.description": "配置优先搜索的图标分类，比如 ant-design 或 mdi 等。"
+}

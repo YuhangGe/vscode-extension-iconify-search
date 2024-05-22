@@ -8,6 +8,7 @@ const watch = process.argv[6] === '--watch';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    // HtmlImportPlugin,
     tsconfigPaths({
       projects: [path.resolve(__dirname, '../tsconfig.json')],
     }),

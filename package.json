@@ -21,21 +21,38 @@
     "onCommand:iconify.search"
   ],
   "main": "./out/extension.cjs",
+  "l10n": "./l10n",
   "contributes": {
     "views": {
       "explorer": [
         {
           "type": "webview",
-          "id": "iconfiySearch.iconsView",
-          "name": "Iconify Icons"
+          "id": "iconifySearch.iconsView",
+          "name": "%iconifyView.name%"
         }
       ]
     },
     "commands": [
       {
         "command": "iconify.search",
-        "title": "Search & Insert",
+        "title": "%iconifySearch.title%",
         "category": "Iconify"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Iconify Search",
+        "properties": {
+          "iconifySearch.favorites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "title": "Icon Category"
+            },
+            "default": [],
+            "description": "%settings.favorites.description%"
+          }
+        }
       }
     ]
   },
@@ -56,6 +73,7 @@
     "@types/vscode-webview": "^1.57.5",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
+    "@vscode/l10n-dev": "^0.0.35",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -71,5 +89,8 @@
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vite-tsconfig-paths": "^4.3.2"
+  },
+  "dependencies": {
+    "@vscode/l10n": "^0.0.18"
   }
 }
