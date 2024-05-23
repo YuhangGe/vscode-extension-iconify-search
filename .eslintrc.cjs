@@ -9,9 +9,13 @@ module.exports = {
   plugins: ['import', '@typescript-eslint', 'prettier'],
   extends: [
     'eslint:recommended',
+    'plugin:tailwindcss/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',
     'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:react/jsx-runtime',
   ],
   parserOptions: {
     sourceType: 'module',

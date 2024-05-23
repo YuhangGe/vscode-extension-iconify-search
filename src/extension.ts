@@ -5,7 +5,7 @@
 
 import { l10n, window, commands } from 'vscode';
 import type { ExtensionContext } from 'vscode';
-import { IconfiyViewProvider } from './iconifyView';
+import { IconifySearchPanel } from './iconifyPanel';
 
 // class MyButton implements QuickInputButton {
 //   constructor(
@@ -16,21 +16,6 @@ import { IconfiyViewProvider } from './iconifyView';
 
 function readSearchText() {
   return new Promise<string | undefined>((resolve) => {
-    // const createResourceGroupButton = new MyButton(
-    //   {
-    //     dark: Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
-    //     light: Uri.file(context.asAbsolutePath('resources/light/add.svg')),
-    //   },
-    //   'Create Resource Group',
-    // );
-    // const createResourceGroupButton2 = new MyButton(
-    //   {
-    //     dark: Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
-    //     light: Uri.file(context.asAbsolutePath('resources/light/add.svg')),
-    //   },
-    //   'Create Resource Group',
-    // );
-
     let value = '';
     const input = window.createInputBox();
     input.placeholder = l10n.t('Search Iconify Icons');
@@ -50,21 +35,23 @@ function readSearchText() {
 }
 
 export function activate(context: ExtensionContext) {
-  const iconifyViewProvider = new IconfiyViewProvider(context.extensionUri);
+  const iconifySearchPanel = new IconifySearchPanel(context.extensionUri);
 
-  context.subscriptions.push(
-    window.registerWebviewViewProvider(IconfiyViewProvider.viewType, iconifyViewProvider),
-  );
+  // context.subscriptions.push(
+  //   window.registerWebviewViewProvider(IconfiyViewProvider.viewType, iconifyViewProvider),
+  // );
 
   context.subscriptions.push(
     commands.registerCommand('iconify.search', async () => {
-      const text = await readSearchText();
+      await iconifySearchPanel.show();
 
-      if (!text?.trim()) {
-        return;
-      }
+      // const text = await readSearchText();
 
-      await iconifyViewProvider.searchIcons(text);
+      // if (!text?.trim()) {
+      //   return;
+      // }
+
+      // iconifySearchPanel.show();
 
       // void window.showInformationMessage(`Got: ${matchedIcons.length}, ${hasMore}`);
     }),

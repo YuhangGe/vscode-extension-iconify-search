@@ -1,7 +1,7 @@
 {
   "name": "iconify-search",
   "displayName": "Iconify Search",
-  "description": "Search and Insert Iconify Icons in VS Code",
+  "description": "Search Iconify Icons in VS Code",
   "version": "0.0.1",
   "publisher": "abeyuhang",
   "private": true,
@@ -23,15 +23,6 @@
   "main": "./out/extension.cjs",
   "l10n": "./l10n",
   "contributes": {
-    "views": {
-      "explorer": [
-        {
-          "type": "webview",
-          "id": "iconifySearch.iconsView",
-          "name": "%iconifyView.name%"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "iconify.search",
@@ -63,16 +54,24 @@
     "watch:extension": "vite build -c scripts/vite.extension.config.ts -- --watch",
     "build:webview:iconify": "vite build -c scripts/vite.webview.config.ts -- iconify",
     "watch:webview:iconify": "vite build -c scripts/vite.webview.config.ts -- iconify --watch",
+    "dev:webview:iconify": "vite dev -c scripts/vite.webview.config.ts -- iconify",
     "lint": "eslint './{src,scripts}/**/*.{ts,tsx}' --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@ant-design/colors": "^7.0.2",
+    "@egoist/tailwindcss-icons": "^1.8.0",
+    "@iconify/json": "^2.2.212",
+    "@iconify/tailwind": "^1.1.1",
     "@types/node": "^20.12.12",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
     "@types/vscode": "^1.89.0",
     "@types/vscode-webview": "^1.57.5",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
+    "@vitejs/plugin-react-swc": "^3.6.0",
     "@vscode/l10n-dev": "^0.0.35",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
@@ -80,17 +79,23 @@
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-import": "npm:eslint-plugin-i@^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-tailwindcss": "^3.16.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.3",
+    "type-fest": "^4.18.2",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "dependencies": {
-    "@vscode/l10n": "^0.0.18"
+    "@vscode/l10n": "^0.0.18",
+    "antd": "^5.17.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

@@ -1,5 +1,4 @@
 {
-  "iconifyView.name": "Iconify Search",
-  "iconifySearch.title": "Search & Insert",
+  "iconifySearch.title": "Search Icons",
   "settings.favorites.description": "Configure the icon category for priority search, such as ant-design or mdi, etc."
 }
