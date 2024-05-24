@@ -5,7 +5,7 @@ import { Header } from './Header';
 import { locale } from './locale';
 import { IconStore } from './store';
 import { vscode } from './vscode';
-import { Gallery } from './Gallery';
+import { Gallery } from './GalleryV';
 
 function bodyHasDark() {
   return (
@@ -73,9 +73,17 @@ export const App: FC = () => {
     vscode.postMessage({
       type: 'load',
     });
-    const ob = new MutationObserver(() => {
-      setIsDark(bodyHasDark());
-    });
+    const onThemeChange = () => {
+      const isDark = bodyHasDark();
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      setIsDark(isDark);
+    };
+    onThemeChange(); // call first time
+    const ob = new MutationObserver(onThemeChange);
     ob.observe(document.body, { attributes: true });
     return () => {
       window.removeEventListener('message', onMessage);

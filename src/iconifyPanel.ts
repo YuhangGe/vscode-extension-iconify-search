@@ -80,7 +80,7 @@ export class IconifySearchPanel {
     const files = await fs.readdir(iconifyJsonDir);
     // const st = Date.now();
     // console.log('send start');
-    for await (const file of files) {
+    for await (const file of files.slice(0, 1)) {
       if (!file.endsWith('.json')) continue;
       const buf = await fs.readFile(path.join(iconifyJsonDir, file));
       await this._panel?.webview.postMessage({
