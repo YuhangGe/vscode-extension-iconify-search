@@ -1,4 +1,11 @@
+export interface ViewBox {
+  left?: number;
+  top?: number;
+  width?: number;
+  height?: number;
+}
 export interface Icon {
+  id: string;
   name: string;
   body: string;
 }

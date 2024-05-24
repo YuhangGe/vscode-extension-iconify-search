@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from 'react';
 import { App as AntApp, ConfigProvider, Spin, theme } from 'antd';
-import type { Icon } from '../common';
+import type { Icon, IconCategory, ViewBox } from '../common';
 import { Header } from './Header';
 import { locale } from './locale';
 import { IconStore } from './store';
@@ -17,7 +17,6 @@ function bodyHasDark() {
 export const App: FC = () => {
   const [isDark, setIsDark] = useState(() => bodyHasDark());
   const [icons, setIcons] = useState<Icon[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const searchIcons = (keyword: string) => {
     if (!keyword) {
@@ -29,23 +28,50 @@ export const App: FC = () => {
   useEffect(() => {
     const onMessage = (evt: MessageEvent) => {
       if (typeof evt.data !== 'object' || !evt.data) return;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { type, value } = evt.data as { type: string; value: any };
-      switch (type) {
-        case 'load-all-icons': {
-          IconStore.all = value;
-          IconStore.allFlat = IconStore.all.reduce((p, c) => {
-            return p.concat(c.icons);
-          }, [] as Icon[]);
-          setLoading(false);
+      switch (evt.data.type) {
+        case 'load:file': {
+          const { category, buffer } = evt.data as { category: string; buffer: ArrayBuffer };
+          const cnt = new TextDecoder().decode(buffer);
+          const data = JSON.parse(cnt) as {
+            info: { name: string } & ViewBox;
+            icons: Record<string, Icon & ViewBox>;
+          } & ViewBox;
+          const left = data.left ?? data.info.left ?? 0;
+          const top = data.top ?? data.info.top ?? 0;
+          const width = data.width ?? data.info.width ?? 16;
+          const height = data.height ?? data.info.height ?? 16;
+          // console.log(category);
+          const icgroup: IconCategory = {
+            category: category,
+            name: data.info.name,
+            icons: Object.entries(data.icons).map(([name, icon]) => {
+              icon.name = name;
+              icon.id = category + '::' + name;
+              const l = icon.left ?? left;
+              const t = icon.top ?? top;
+              const w = icon.width ?? width;
+              const h = icon.height ?? height;
+              const viewPort = `${l} ${t} ${w} ${h}`;
+              const body = icon.body.replace(/currentColor/gi, 'red');
+              const xml = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='${viewPort}' width='${w}' height='${h}'>${body}</svg>`;
+              icon.body = xml;
+              return icon;
+            }),
+          };
+          IconStore.all.push(icgroup);
+          IconStore.allFlat = IconStore.allFlat.concat(icgroup.icons);
           searchIcons('');
+          break;
+        }
+        case 'load:favors': {
+          IconStore.favors = evt.data.favors;
           break;
         }
       }
     };
     window.addEventListener('message', onMessage);
     vscode.postMessage({
-      type: 'load-all-icons',
+      type: 'load',
     });
     const ob = new MutationObserver(() => {
       setIsDark(bodyHasDark());
@@ -65,7 +91,7 @@ export const App: FC = () => {
       }}
     >
       <AntApp className='flex size-full flex-col p-4'>
-        {loading ? (
+        {!icons.length ? (
           <Spin />
         ) : (
           <>
