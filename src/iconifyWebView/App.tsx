@@ -3,7 +3,7 @@ import { App as AntApp, ConfigProvider, Spin, theme } from 'antd';
 import type { Setting, Icon, IconCategory, ViewBox } from '../common';
 import { Header } from './Header';
 import { locale } from './locale';
-import { IconStore } from './store';
+import { IconStore, searchEngine } from './store';
 import { vscode } from './vscode';
 import { Gallery } from './GalleryV';
 import { SettingContext } from './setting';
@@ -22,19 +22,30 @@ export const App: FC = () => {
     if (!text) {
       setIcons(IconStore.allFlat);
     } else {
-      const r = new RegExp('\\b' + text + '\\b', 'i');
-      const arr1: Icon[] = [];
-      const arr2: Icon[] = [];
-      IconStore.allFlat.forEach((ic) => {
-        if (r.test(ic.name)) {
-          arr1.push(ic);
-        } else if (ic.name.includes(text)) {
-          arr2.push(ic);
-        }
-      });
-      const ics = arr1.concat(arr2);
-      // console.log('do search', text, ics);
-      setIcons(ics);
+      // const r = new RegExp('\\b' + text + '\\b', 'i');
+      // const arr1: Icon[] = [];
+      // const arr2: Icon[] = [];
+      // IconStore.allFlat.forEach((ic) => {
+      //   if (r.test(ic.name)) {
+      //     arr1.push(ic);
+      //   } else if (ic.name.includes(text)) {
+      //     arr2.push(ic);
+      //   }
+      // });
+      // const ics = arr1.concat(arr2);
+      // // console.log('do search', text, ics);
+      // setIcons(ics);
+      // const result = search(text) as number[];
+      // console.log('SS RE', result);
+      // const ics = result.map((index) => IconStore.allFlat[index]);
+      // setIcons(ics);
+      const result = searchEngine.search(text);
+      setIcons(
+        result.map((item) => {
+          return IconStore.allFlat[item.id];
+        }),
+      );
+      // console.log(result);
     }
   };
 
@@ -74,10 +85,19 @@ export const App: FC = () => {
               return icon;
             }),
           };
+
           IconStore.all.push(icgroup);
+          icgroup.icons.forEach((ic, idx) => {
+            searchEngine.add({ id: IconStore.allFlat.length + idx, name: ic.name });
+          });
+          // searchEngine.addAll(icgroup.icons);
           IconStore.allFlat = IconStore.allFlat.concat(icgroup.icons);
           searchIcons();
           setLoading(false);
+          break;
+        }
+        case 'load:file:end': {
+          // searchEngine.addAll(IconStore.allFlat);
           break;
         }
         case 'load:favors': {

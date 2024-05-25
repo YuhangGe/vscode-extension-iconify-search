@@ -94,20 +94,8 @@ export class IconifySearchPanel {
         category: file.slice(0, file.length - 5),
         buffer: buf.buffer,
       });
-      // const data = JSON.parse(cnt);
-      // const category = file.slice(0, file.length - 5);
-      // const icgroup: IconCategory = {
-      //   category: category,
-      //   name: data.info.name,
-      //   icons: Object.entries<{ body: string }>(data.icons).map(([name, icon]) => {
-      //     return {
-      //       name,
-      //       body: icon.body,
-      //     };
-      //   }),
-      // };
-      // allGroups.push(icgroup);
     }
+    await this._panel?.webview.postMessage({ type: 'load:file:end' });
     // console.log('send end', Date.now() - st);
     // return allGroups;
   }
