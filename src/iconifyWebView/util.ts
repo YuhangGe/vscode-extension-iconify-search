@@ -62,3 +62,22 @@ export const copyToClipboard = (textToCopy: string) => {
     textArea.remove();
   });
 };
+
+export function sortedInsert<T extends { weight: number }>(arr: T[], el: T) {
+  let high = arr.length;
+  if (high === 0 || arr[high - 1].weight >= el.weight) {
+    arr.push(el);
+    return;
+  }
+  let low = 0;
+  if (arr[low].weight < el.weight) {
+    arr.unshift(el);
+    return;
+  }
+  while (low < high) {
+    const mid = (low + high) >>> 1;
+    if (arr[mid].weight > el.weight) low = mid + 1;
+    else high = mid;
+  }
+  arr.splice(low, 0, el);
+}

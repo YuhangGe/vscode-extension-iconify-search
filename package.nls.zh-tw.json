@@ -1,4 +1,4 @@
 {
   "iconifySearch.title": "搜索圖標",
-  "settings.favorites": "配置優先搜索的圖標分類，比如 ant-design 或 mdi 等。"
+  "settings.favorites": "配置分類 Tab 上優先排列的圖標分類，比如 ant-design 或 material-symbols 等。"
 }

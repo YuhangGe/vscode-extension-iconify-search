@@ -4,6 +4,7 @@ import { App, Tooltip } from 'antd';
 import type { Icon } from '../common';
 import { copyToClipboard } from './util';
 import { Ic } from './Ic';
+import { IconStore } from './store';
 
 const ICON_SIZE = 56;
 const ICON_GAP = 16;
@@ -28,8 +29,9 @@ const IcList: FC<{ translateY: number; renderIcons: Icon[] }> = ({ translateY, r
   }, []);
   const renderTooltip = (icon: Icon) => (
     <div>
-      <div>分类：{icon.name}</div>
-      <div>名称：{icon.name}</div>
+      <div className='text-lg mb-1 '>{icon.name}</div>
+      <div className='text-sm opacity-70'>前缀：{icon.category}</div>
+      <div className='text-sm opacity-70'>分类：{IconStore.all.get(icon.category)?.name}</div>
     </div>
   );
   return (
@@ -46,7 +48,9 @@ const IcList: FC<{ translateY: number; renderIcons: Icon[] }> = ({ translateY, r
           <div
             className='flex flex-col hover:text-blue cursor-pointer'
             onClick={() => {
-              void copyToClipboard(ic.body).then(() => {
+              void copyToClipboard(
+                `<span className="icon-[${ic.category}--${ic.name}]"></span>`,
+              ).then(() => {
                 void message.success('Copied!');
               });
             }}

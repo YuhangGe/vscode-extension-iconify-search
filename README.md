@@ -1,3 +1,17 @@
+# TODO
+
+* 搜索 debounce 自动生效（同时可回车）
+* 配置默认打开的分类 tab（不配置为全部）
+* vscode command 向 webview 下发搜索关键字。
+* webview 中实现配置弹窗，和 vscode 配置同步，可交互式配置。
+* Copy 类型选择（svg, react, vue, html, tailwindcss, tailwindcss-react）
+* Tooltip 改 popover，可点击跳转到分类，支持搜藏操作，点击后关闭 popover。
+* Header.tsx 改成 forwardRef，支持切换到全部 tab
+* 我的搜藏页面。
+* 多语言
+* Readme 文档完善
+
+
 # QuickInput Sample
 
 This is a sample extension that shows the QuickInput UI and usage of the QuickInput API.

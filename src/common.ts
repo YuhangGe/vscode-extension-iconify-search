@@ -5,6 +5,7 @@ export interface ViewBox {
   height?: number;
 }
 export interface Icon {
+  category: string;
   id: string;
   name: string;
   body: string;

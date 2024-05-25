@@ -84,18 +84,34 @@ export class IconifySearchPanel {
     });
     // const allGroups: IconCategory[] = [];
     const files = await fs.readdir(iconifyJsonDir);
+    const GROUP_SIZE = 35;
+    const groups = Math.ceil(files.length / GROUP_SIZE);
     // const st = Date.now();
     // console.log('send start');
-    for await (const file of files) {
-      if (!file.endsWith('.json')) continue;
-      const buf = await fs.readFile(path.join(iconifyJsonDir, file));
+    for (let i = 0; i < groups; i++) {
+      const bufs = await Promise.all(
+        files.slice(i * GROUP_SIZE, (i + 1) * GROUP_SIZE).map((f) => {
+          return fs.readFile(path.join(iconifyJsonDir, f));
+        }),
+      );
       await this._panel?.webview.postMessage({
-        type: 'load:file',
-        category: file.slice(0, file.length - 5),
-        buffer: buf.buffer,
+        type: 'load:files',
+        bufs: bufs.map((buf) => buf.buffer),
       });
     }
-    await this._panel?.webview.postMessage({ type: 'load:file:end' });
+
+    // console.log('send files', Date.now() - st);
+
+    // for await (const file of files) {
+    //   if (!file.endsWith('.json')) continue;
+    //   const buf = await fs.readFile(path.join(iconifyJsonDir, file));
+    //   await this._panel?.webview.postMessage({
+    //     type: 'load:file',
+    //     category: file.slice(0, file.length - 5),
+    //     buffer: buf.buffer,
+    //   });
+    // }
+    // await this._panel?.webview.postMessage({ type: 'load:file:end' });
     // console.log('send end', Date.now() - st);
     // return allGroups;
   }

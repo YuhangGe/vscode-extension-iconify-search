@@ -1,29 +1,55 @@
 import { Button, Input, Segmented, Space, Tabs } from 'antd';
-import { useState, type FC } from 'react';
+import { useContext, useMemo, useState, type FC } from 'react';
 import { t } from './locale';
+import { SettingContext } from './setting';
+import { IconStore } from './store';
 
+export const ALL_TAB_KEY = '--ALL--';
 export const Header: FC<{
+  tabs: string[];
+  onTabChange: (v: string) => void;
   onSearch: (v: string) => void;
-}> = ({ onSearch }) => {
+}> = ({ onSearch, tabs, onTabChange }) => {
   const [text, setText] = useState('');
-
+  const { favors } = useContext(SettingContext);
+  const tabItems = useMemo(() => {
+    const items = [...new Set((favors ?? []).concat(tabs)).values()].map((c) => {
+      return {
+        label: IconStore.all.get(c)?.name ?? c,
+        key: c,
+      };
+    });
+    items.unshift({
+      label: '全部',
+      key: ALL_TAB_KEY,
+    });
+    return items;
+  }, [tabs, favors]);
   return (
     <div className='w-full shrink-0'>
-      <Segmented
-        className='mb-2'
-        options={[
-          {
-            label: '全部图标',
-            value: 'all',
-          },
-          {
-            label: '最近使用',
-            value: 'recent',
-          },
-        ]}
-      />
+      <div className='flex items-center gap-4'>
+        <Segmented
+          className='mb-2'
+          options={[
+            {
+              label: '全部图标',
+              value: 'all',
+            },
+            {
+              label: '我的收藏',
+              value: 'recent',
+            },
+          ]}
+        />
+        <Button
+          size='small'
+          icon={<span className='icon-[ant-design--setting-outlined]'></span>}
+          type='text'
+        />
+      </div>
       <Space.Compact className='w-full'>
         <Input
+          allowClear
           value={text}
           onKeyDown={(evt) => {
             if (evt.key === 'Enter') {
@@ -45,16 +71,10 @@ export const Header: FC<{
       </Space.Compact>
       <Tabs
         size='small'
-        items={[
-          {
-            key: 'all',
-            label: '全部',
-          },
-          {
-            key: 'ant-design',
-            label: 'Ant Design',
-          },
-        ]}
+        items={tabItems}
+        onChange={(k) => {
+          onTabChange(k);
+        }}
       />
     </div>
   );
