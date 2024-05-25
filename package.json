@@ -41,7 +41,7 @@
               "title": "Icon Category"
             },
             "default": [],
-            "description": "%settings.favorites.description%"
+            "description": "%settings.favorites%"
           }
         }
       }

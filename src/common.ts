@@ -14,3 +14,7 @@ export interface IconCategory {
   name: string;
   icons: Icon[];
 }
+
+export interface Setting {
+  favors?: string[];
+}

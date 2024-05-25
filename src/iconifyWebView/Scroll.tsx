@@ -1,3 +1,4 @@
+/** this file is deprecated */
 import type { MouseEvent as ReactMouseEvent, FC } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

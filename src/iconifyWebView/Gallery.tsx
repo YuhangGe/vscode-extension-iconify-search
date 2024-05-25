@@ -1,7 +1,8 @@
+/** this file is deprecated */
+
 import { useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react';
-import { App, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import type { Icon } from '../common';
-import { copyToClipboard } from './util';
 import { Scroll } from './Scroll';
 
 const ICON_SIZE = 56;
@@ -22,8 +23,6 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
     scrollTop: 0,
     domHeight: 0,
   });
-  // const [renderIcons, setRenderIcons] = useState<Icon[]>([]);
-  const { message } = App.useApp();
 
   useEffect(() => {
     if (!el.current) return;
@@ -56,8 +55,8 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
       const h = Math.round(st * sh);
       const n = Math.floor(h / (ICON_SIZE + ICON_GAP));
       const si = rowC * n;
-      console.log(si, rowN, rowC);
-      console.log(icons.slice(si, si + rowN * rowC));
+      // console.log(si, rowN, rowC);
+      // console.log(icons.slice(si, si + rowN * rowC));
       setRenderIcons(icons.slice(si, si + rowN * rowC));
     },
     [icons],
@@ -85,7 +84,7 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
           let t = v.scrollTop + k;
           if (t < 0) t = 0;
           else if (t > 1.0) t = 1.0;
-          console.log(evt.deltaY, t, k, d);
+          // console.log(evt.deltaY, t, k, d);
           // return v;
           return { ...v, scrollTop: t };
         });

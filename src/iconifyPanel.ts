@@ -4,26 +4,32 @@ import type { Disposable, Webview, WebviewPanel } from 'vscode';
 import { Uri, ViewColumn, l10n, window, workspace } from 'vscode';
 import _tpl from './iconifyPanel.html?raw';
 import { getNonce, replaceTpl } from './util';
+import type { Setting } from './common';
 // import type { IconCategory } from './common';
 
 const PanelTitle = l10n.t('Iconify Icons');
 
+function getConf() {
+  const conf = workspace.getConfiguration('iconifySearch');
+  return {
+    favors: conf.get('favorites', []),
+  };
+}
 export class IconifySearchPanel {
   public static readonly viewType = 'iconifySearch';
   private _panel?: WebviewPanel;
-  private _favors: Set<string>;
-  // private _logo?: {
-  //   dark: Uri;
-  //   light: Uri;
-  // };
+  private _setting: Setting;
+
   private _disposables: Disposable[] = [];
 
   constructor(private readonly _extensionUri: Uri) {
-    // this._store = new Map();
-    // this._icons = [];
-    this._favors = new Set(workspace.getConfiguration('iconifySearch').get('favorites', []));
+    this._setting = getConf();
     workspace.onDidChangeConfiguration(() => {
-      this._favors = new Set(workspace.getConfiguration('iconifySearch').get('favorites', []));
+      this._setting = getConf();
+      void this._panel?.webview.postMessage({
+        type: 'load:setting',
+        setting: this._setting,
+      });
     });
   }
 
@@ -73,8 +79,8 @@ export class IconifySearchPanel {
     }
 
     await this._panel?.webview.postMessage({
-      type: 'load:favors',
-      favors: this._favors,
+      type: 'load:setting',
+      setting: this._setting,
     });
     // const allGroups: IconCategory[] = [];
     const files = await fs.readdir(iconifyJsonDir);

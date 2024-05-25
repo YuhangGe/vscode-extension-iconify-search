@@ -1,3 +1,45 @@
+import { useEffect, useState } from 'react';
+
+function bodyHasDark() {
+  return (
+    document.body.getAttribute('data-theme') === 'dark' ||
+    document.body.getAttribute('data-vscode-theme-kind') === 'vscode-dark'
+  );
+}
+
+const theme: {
+  isDark: boolean;
+  watchers: Set<() => void>;
+} = {
+  isDark: bodyHasDark(),
+  watchers: new Set(),
+};
+document.documentElement.classList[theme.isDark ? 'add' : 'remove']('dark');
+
+const ob = new MutationObserver(() => {
+  const isDark = bodyHasDark();
+  if (theme.isDark !== isDark) {
+    theme.isDark = isDark;
+    theme.watchers.forEach((fn) => fn());
+    document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+  }
+});
+ob.observe(document.body, { attributes: true });
+
+export function useIsDarkMode() {
+  const [isDark, setIsDark] = useState(theme.isDark);
+  useEffect(() => {
+    const onChange = () => {
+      setIsDark(theme.isDark);
+    };
+    theme.watchers.add(onChange);
+    return () => {
+      theme.watchers.delete(onChange);
+    };
+  }, []);
+  return isDark;
+}
+
 export const copyToClipboard = (textToCopy: string) => {
   // navigator clipboard needs a secure context (HTTPS)
   if (navigator.clipboard && window.isSecureContext) {
