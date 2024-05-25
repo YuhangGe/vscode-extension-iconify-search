@@ -20,7 +20,7 @@ export const App: FC = () => {
 
   const searchIcons = (keyword: string) => {
     if (!keyword) {
-      setIcons(IconStore.allFlat);
+      setIcons(IconStore.allFlat.slice(0, 100));
       return;
     }
   };
