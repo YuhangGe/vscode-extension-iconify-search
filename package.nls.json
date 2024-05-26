@@ -1,7 +1,7 @@
 {
   "iconifySearch.command.search": "Search Icons",
   "iconifySearch.command.view.all": "View All Icons",
-  "iconifySearch.command.view.favorites": "View My Favorites",
-  "iconifySearch.command.insert.favorites": "Insert from My Favorites",
-  "settings.favorites": "Configure the icon category for priority search, such as ant-design or mdi, etc."
+  "iconifySearch.command.view.favorites": "View Favorite Icons",
+  "settings.favor.tabs": "配置分类 Tab 上优先排列的图标分类，比如 ant-design 或 material-symbols 等。推荐在搜索图标的界面上可视化配置。",
+  "settings.favor.icons": "配置放入到我的收藏中的图标，需要 [category]:[name] 格式。推荐在搜索图标的界面上可视化配置。"
 }

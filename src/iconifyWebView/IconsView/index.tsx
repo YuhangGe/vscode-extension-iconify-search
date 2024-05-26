@@ -1,19 +1,16 @@
 import type { FC } from 'react';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Spin, Tabs } from 'antd';
+import { useEffect, useState } from 'react';
+import { Tabs } from 'antd';
 import type { Icon } from '../../common';
-import { vscode } from '../vscode';
-import { IconStore, simpleSearchIcons } from '../store';
-import { InitDataContext } from '../context';
-import { parseJsonBuffer } from './helper';
+import { simpleSearchIcons } from '../search';
+import { GROUP_ALL_KEY, globalStore } from '../store';
 import { Gallery } from './Gallery';
 import { Search } from './Search';
 
-const ALL_TAB_KEY = '--all--';
 export const IconsView: FC = () => {
   const [icons, setIcons] = useState<Icon[]>([]);
-  const { setting, searchText } = useContext(InitDataContext) ?? {};
-  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = globalStore.useStore('searchText');
+  const [favorTabs] = globalStore.useStore('favorTabs');
   const [tabs, setTabs] = useState<
     {
       label: string;
@@ -22,97 +19,57 @@ export const IconsView: FC = () => {
   >([
     {
       label: '全部',
-      key: ALL_TAB_KEY,
+      key: GROUP_ALL_KEY,
     },
   ]);
-  const [tab, setTab] = useState(() => {
-    if (setting?.favors?.length) {
-      return setting.favors[0];
-    } else {
-      return ALL_TAB_KEY;
-    }
-  });
-
-  const filter = useRef({ text: searchText, category: tab });
+  const [groupTab, setGroupTab] = globalStore.useStore('groupTab');
 
   const searchIcons = () => {
-    const { text, category } = filter.current;
-    if (!text) {
-      if (!category) setIcons(IconStore.allFlat);
+    const { searchText, groupTab, all } = globalStore.getStore();
+    const t = searchText?.trim() ?? '';
+    if (!t) {
+      if (groupTab === GROUP_ALL_KEY) setIcons(globalStore.get('allFlat'));
       else {
-        setIcons(IconStore.all.get(category)?.icons ?? []);
+        setIcons(all.get(groupTab)?.icons ?? []);
       }
     } else {
-      const result = simpleSearchIcons(text, category);
+      const result = simpleSearchIcons(t, groupTab === GROUP_ALL_KEY ? '' : groupTab);
       setIcons(result);
     }
   };
-  const updateTabs = useCallback(() => {
-    const favors = setting?.favors ?? [];
+
+  const [all] = globalStore.useStore('all');
+  useEffect(() => {
     setTabs((v) => {
-      const newTabs = [...new Set([...favors, ...IconStore.all.keys()]).values()]
-        .filter((k) => IconStore.all.has(k))
+      const newTabs = [...new Set([...favorTabs, ...all.keys()]).values()]
+        .filter((k) => all.has(k))
         .map((key) => {
           return {
-            label: IconStore.all.get(key)?.name as string,
+            label: all.get(key)?.name as string,
             key,
           };
         });
       newTabs.unshift(v[0]);
       return newTabs;
     });
-  }, [setting?.favors]);
-  const onMessage = useCallback((evt: MessageEvent) => {
-    if (typeof evt.data !== 'object' || !evt.data) return;
-    switch (evt.data.type) {
-      case 'load:files': {
-        const bufs = evt.data.bufs as ArrayBuffer[];
-        bufs.forEach((buffer) => {
-          const group = parseJsonBuffer(buffer);
-          IconStore.all.set(group.category, group);
-          IconStore.allFlat = IconStore.allFlat.concat(group.icons);
-        });
-        updateTabs();
-        searchIcons();
-        setLoading(false);
-        break;
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('message', onMessage);
-    if (!IconStore.allFlat.length) {
-      vscode.postMessage({
-        type: 'load',
-      });
-    } else {
-      setLoading(false);
-      updateTabs();
-      searchIcons();
-    }
-
-    return () => {
-      window.removeEventListener('message', onMessage);
-    };
-  }, []);
+  }, [favorTabs, all]);
 
   const selectTab = (tab: string) => {
-    setTab(tab);
-    const category = tab === ALL_TAB_KEY ? '' : tab;
-    if (filter.current.category !== category) {
-      filter.current.category = category;
-      searchIcons();
-    }
+    setGroupTab(tab);
+    searchIcons();
   };
+
+  useEffect(() => {
+    searchIcons();
+  }, [all]);
 
   return (
     <>
       <Search
-        defaultValue={filter.current.text}
+        value={searchText}
         onSearch={(t) => {
-          if (filter.current.text !== t) {
-            filter.current.text = t;
+          if (searchText !== t) {
+            setSearchText(t);
             searchIcons();
           }
         }}
@@ -120,28 +77,24 @@ export const IconsView: FC = () => {
       <Tabs
         size='small'
         items={tabs}
-        activeKey={tab}
+        activeKey={groupTab}
         onChange={(k) => {
           selectTab(k);
         }}
       />
-      {!icons.length && loading && (
-        <div className='flex justify-center mt-4'>
-          <Spin />
-        </div>
-      )}
+
       {!!icons.length && <Gallery icons={icons} />}
-      {!icons.length && !loading && filter.current.category && (
+      {!icons.length && groupTab !== GROUP_ALL_KEY && (
         <div
           className='mt-2 py-1 text-center cursor-pointer hover:text-hover text-xs'
           onClick={() => {
-            selectTab(ALL_TAB_KEY);
+            selectTab(GROUP_ALL_KEY);
           }}
         >
           暂无图标，点击查看全部图标
         </div>
       )}
-      {!icons.length && !loading && !filter.current.category && (
+      {!icons.length && groupTab === GROUP_ALL_KEY && (
         <div className='mt-2 py-1 text-center text-xs'>暂无图标</div>
       )}
     </>

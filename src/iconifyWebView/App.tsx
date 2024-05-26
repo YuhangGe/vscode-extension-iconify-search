@@ -1,21 +1,27 @@
-import { useState, type FC } from 'react';
-import { App as AntApp, Button, ConfigProvider, Segmented, theme } from 'antd';
-import type { WebviewInitData } from '../common';
+import { useEffect, useState, type FC } from 'react';
+import { App as AntApp, Button, ConfigProvider, Segmented, Spin, theme } from 'antd';
 import { locale } from './locale';
-import { InitDataContext } from './context';
-import { useIsDarkMode } from './util';
 import { IconsView } from './IconsView';
 import { FavoritesView } from './FavoritesView';
+import { vscode } from './vscode';
+import { globalStore } from './store';
 
 export const App: FC = () => {
-  const isDark = useIsDarkMode();
-  const [initData] = useState<WebviewInitData>(window.ICONIFY_INIT_DATA);
-  const [tab, setTab] = useState<'all' | 'favorites'>(() => {
-    return initData.mode === 'insert.favorites' || initData.mode === 'view.favorites'
-      ? 'favorites'
-      : 'all';
-  });
+  const [isDark] = globalStore.useStore('darkMode');
+  const [topTab, setTopTab] = globalStore.useStore('topTab');
+  const [allIcons] = globalStore.useStore('allFlat');
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (allIcons.length > 0) {
+      setLoading(false);
+    }
+  }, [allIcons.length]);
 
+  useEffect(() => {
+    vscode.postMessage({
+      type: 'load',
+    });
+  }, []);
   return (
     <ConfigProvider
       locale={locale}
@@ -24,31 +30,35 @@ export const App: FC = () => {
       }}
     >
       <AntApp className='flex size-full flex-col p-4'>
-        <InitDataContext.Provider value={initData}>
-          <div className='flex items-center gap-4 mb-4'>
-            <Segmented
-              value={tab}
-              onChange={(v) => setTab(v as 'all')}
-              options={[
-                {
-                  label: '全部图标',
-                  value: 'all',
-                },
-                {
-                  label: '我的收藏',
-                  value: 'favorites',
-                },
-              ]}
-            />
-            <Button
-              size='small'
-              icon={<span className='icon-[ant-design--setting-outlined]'></span>}
-              type='text'
-            />
-          </div>
-          {tab === 'all' && <IconsView />}
-          {tab === 'favorites' && <FavoritesView />}
-        </InitDataContext.Provider>
+        {loading ? (
+          <Spin />
+        ) : (
+          <>
+            <div className='flex items-center gap-4 mb-4'>
+              <Segmented
+                value={topTab}
+                onChange={(v) => setTopTab(v as 'all')}
+                options={[
+                  {
+                    label: '全部图标',
+                    value: 'all',
+                  },
+                  {
+                    label: '我的收藏',
+                    value: 'favor',
+                  },
+                ]}
+              />
+              <Button
+                size='small'
+                icon={<span className='icon-[ant-design--setting-outlined]'></span>}
+                type='text'
+              />
+            </div>
+            {topTab === 'all' && <IconsView />}
+            {topTab === 'favor' && <FavoritesView />}
+          </>
+        )}
       </AntApp>
     </ConfigProvider>
   );

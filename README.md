@@ -5,9 +5,11 @@
 * vscode command 向 webview 下发搜索关键字。[done]
 * webview 中实现配置弹窗，和 vscode 配置同步，可交互式配置。
 * Copy 类型选择（svg, react, vue, html, tailwindcss, tailwindcss-react）
-* Tooltip 改 popover，可点击跳转到分类，支持搜藏操作，点击后关闭 popover。
+* Tooltip 改 popover，可点击跳转到分类，支持搜藏操作，点击后关闭 popover。[done]
 * Header.tsx 改成 forwardRef，支持切换到全部 tab[done]
-* 我的搜藏页面。
+* 双击关闭当前 tab 并自动把代码插入到被激活的 tab 里的文本中。[done]
+* 优化交互，不使用双击交互。图标增加操作按钮蒙层。可能需要适当调大图标大小。
+* 我的搜藏页面。[done]
 * 多语言
 * Readme 文档完善
 

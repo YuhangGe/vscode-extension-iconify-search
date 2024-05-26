@@ -1,13 +1,15 @@
 import { Button, Input, Space } from 'antd';
-import { useRef, useState, type FC } from 'react';
+import { useEffect, useRef, useState, type FC } from 'react';
 import { t } from '../locale';
 
-export const ALL_TAB_KEY = '--ALL--';
 export const Search: FC<{
-  defaultValue?: string;
+  value?: string;
   onSearch: (v: string) => void;
-}> = ({ onSearch, defaultValue }) => {
-  const [text, setText] = useState(defaultValue ?? '');
+}> = ({ onSearch, value }) => {
+  const [text, setText] = useState(value ?? '');
+  useEffect(() => {
+    setText(value ?? '');
+  }, [value]);
   const x = useRef(0);
   const onChange = (v: string) => {
     if (x.current) clearTimeout(x.current);
@@ -27,13 +29,13 @@ export const Search: FC<{
               clearTimeout(x.current);
               x.current = 0;
             }
-            onSearch(text.trim());
+            onSearch(text);
           }
         }}
         onChange={(e) => {
           const t = e.target.value;
           setText(t);
-          onChange(t.trim());
+          onChange(t);
         }}
         placeholder={t('Search Iconify Icons')}
       />

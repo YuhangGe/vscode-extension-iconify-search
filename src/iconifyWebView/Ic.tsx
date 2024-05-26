@@ -1,14 +1,16 @@
-import { useState, type CSSProperties, type FC, type ReactNode } from 'react';
+import { useMemo, useState, type CSSProperties, type FC, type ReactNode } from 'react';
 import { App, Button, Popover } from 'antd';
 import type { Icon } from '../common';
-import { IconStore } from './store';
 import { copyToClipboard } from './util';
+import { globalStore, updateFavorIcon } from './store';
+import { vscode } from './vscode';
 
 const IcTooltipTitle: FC<{ icon: Icon }> = ({ icon }) => {
-  const [isFavor, setIsFavor] = useState(() => {
+  const [favorIcons] = globalStore.useStore('favorIcons');
+  const isFavor = useMemo(() => {
     // console.log('calc is favor');
-    return IconStore.favorites.indexOf(icon) >= 0;
-  });
+    return favorIcons.indexOf(icon.id) >= 0;
+  }, [favorIcons]);
 
   return (
     <div className='flex items-center gap-4'>
@@ -18,14 +20,7 @@ const IcTooltipTitle: FC<{ icon: Icon }> = ({ icon }) => {
         type='text'
         className='text-orange hover:text-orange flex items-center justify-center'
         onClick={() => {
-          if (isFavor) {
-            const idx = IconStore.favorites.indexOf(icon);
-            idx >= 0 && IconStore.favorites.splice(idx, 1);
-            setIsFavor(false);
-          } else {
-            IconStore.favorites.push(icon);
-            setIsFavor(true);
-          }
+          updateFavorIcon(!isFavor ? 'add' : 'rm', icon);
         }}
       >
         {isFavor ? (
@@ -37,11 +32,43 @@ const IcTooltipTitle: FC<{ icon: Icon }> = ({ icon }) => {
     </div>
   );
 };
+const IcTooltipContent: FC<{ icon: Icon }> = ({ icon }) => {
+  const [all] = globalStore.useStore('all');
+
+  return (
+    <div>
+      <div className='text-sm opacity-70'>
+        前缀：
+        <span
+          className='hover:underline cursor-pointer'
+          onClick={() => {
+            globalStore.set('topTab', 'all');
+            globalStore.set('groupTab', icon.category);
+          }}
+        >
+          {icon.category}
+        </span>
+      </div>
+      <div className='text-sm opacity-70'>
+        分类：
+        <span
+          className='hover:underline cursor-pointer'
+          onClick={() => {
+            globalStore.set('topTab', 'all');
+            globalStore.set('groupTab', icon.category);
+          }}
+        >
+          {all.get(icon.category)?.name}
+        </span>
+      </div>
+    </div>
+  );
+};
 export const IcTooltip: FC<{
   open: boolean;
   onOpenChange: (open: boolean) => void;
   icon: Icon;
-  children?: ReactNode;
+  children: ReactNode;
 }> = ({ open, icon, children, onOpenChange }) => {
   return (
     <Popover
@@ -50,12 +77,7 @@ export const IcTooltip: FC<{
       mouseEnterDelay={0.4}
       destroyTooltipOnHide
       title={<IcTooltipTitle icon={icon} />}
-      content={
-        <div>
-          <div className='text-sm opacity-70'>前缀：{icon.category}</div>
-          <div className='text-sm opacity-70'>分类：{IconStore.all.get(icon.category)?.name}</div>
-        </div>
-      }
+      content={<IcTooltipContent icon={icon} />}
     >
       {children}
     </Popover>
@@ -66,12 +88,6 @@ export const IcImg: FC<{ icon: Icon; className?: string; style?: CSSProperties }
   icon,
   className,
 }) => {
-  // const uri = useMemo(() => {
-  //   const clr = color || (isDark ? '#fff' : '#555');
-  //   const body = icon.body.replace(/currentColor/gi, clr);
-  //   return `data:image/svg+xml,${encodeURIComponent(body)}`;
-  // }, [icon.body, color, isDark]);
-  // return <img className={className} style={style} src={uri} />;
   return (
     <span
       className={className}
@@ -84,6 +100,9 @@ export const IcImg: FC<{ icon: Icon; className?: string; style?: CSSProperties }
 export const ICON_SIZE = 56;
 export const ICON_GAP = 16;
 
+function getIconCode(icon: Icon) {
+  return `<span className="icon-[${icon.category}--${icon.name}]"></span>`;
+}
 export const Ic: FC<{ icon: Icon }> = ({ icon }) => {
   const { message } = App.useApp();
   const [open, setOpen] = useState(false);
@@ -92,12 +111,13 @@ export const Ic: FC<{ icon: Icon }> = ({ icon }) => {
       <div
         className='flex flex-col hover:text-blue cursor-pointer'
         onClick={() => {
-          void copyToClipboard(
-            `<span className="icon-[${icon.category}--${icon.name}]"></span>`,
-          ).then(() => {
+          setOpen(false);
+          void copyToClipboard(getIconCode(icon)).then(() => {
             void message.success('Copied!');
           });
-          setOpen(false);
+        }}
+        onDoubleClick={() => {
+          vscode.postMessage({ type: 'insert', code: getIconCode(icon) });
         }}
         style={{
           width: ICON_SIZE,

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs/promises';
-import type { Disposable, Webview, WebviewPanel } from 'vscode';
+import type { Disposable, Tab, Webview, WebviewPanel } from 'vscode';
 import { Uri, ViewColumn, l10n, window, workspace } from 'vscode';
 import _tpl from './iconifyPanel.html?raw';
 import { getNonce, replaceTpl } from './util';
@@ -12,29 +12,26 @@ const PanelTitle = l10n.t('Iconify Icons');
 function getConf() {
   const conf = workspace.getConfiguration('iconifySearch');
   return {
-    favors: conf.get('favorites', []),
+    favorTabs: conf.get('favor-tabs', []),
+    favorIcons: conf.get('favor-icons', []),
   };
 }
 export class IconifySearchPanel {
   public static readonly viewType = 'iconifySearch';
   private _panel?: WebviewPanel;
-  private _initData: WebviewInitData;
 
   private _disposables: Disposable[] = [];
 
   constructor(private readonly _extensionUri: Uri) {
-    this._initData = {
-      searchText: '',
-      setting: getConf(),
-      mode: 'search',
-    };
-    // workspace.onDidChangeConfiguration(() => {
-    //   this._setting = getConf();
-    //   void this._panel?.webview.postMessage({
-    //     type: 'load:setting',
-    //     setting: this._setting,
-    //   });
-    // });
+    // workspace.onDidChangeConfiguration(
+    //   () => {
+    //     void this._panel?.webview.postMessage({
+    //       type: 'update:setting',
+    //     });
+    //   },
+    //   null,
+    //   this._disposables,
+    // );
   }
 
   // private async _loadLogo() {
@@ -54,7 +51,26 @@ export class IconifySearchPanel {
   //   };
   //   return this._logo;
   // }
-
+  private _getIconifyTab(): Tab | undefined {
+    let tab = undefined;
+    window.tabGroups.all.some((tg) => {
+      tab = tg.tabs.find((t) => t.label === PanelTitle);
+      return !!tab;
+    });
+    return tab;
+  }
+  private _upFavorIcon(op: 'add' | 'rm', id: string) {
+    const fics: string[] = workspace.getConfiguration('iconifySearch').get('favor-icons', []);
+    const idx = fics.indexOf(id);
+    if (op === 'add') {
+      if (idx >= 0) return;
+      fics.push(id);
+    } else {
+      if (idx < 0) return;
+      fics.splice(idx, 1);
+    }
+    void workspace.getConfiguration('iconifySearch').update('favor-icons', fics);
+  }
   private async _loadIcons() {
     const root = workspace.workspaceFolders?.[0].uri.fsPath;
     if (!root) {
@@ -100,25 +116,24 @@ export class IconifySearchPanel {
   }
   public async show(options: { mode: WebviewInitData['mode']; searchText?: string }) {
     if (this._panel) {
-      // 当前版本 vscode 支持激活打开 extenstion tab 后，查询并打开已经存在的 iconify-search tab
-      // https://github.com/microsoft/vscode/issues/188572
-      void window.showInformationMessage(
-        `TODO: Active iconify-search tab when vscode api is ready`,
-      );
-      // window.tabGroups.all.some((tg) => {
-      //   return tg.tabs.some((t) => {
-      //     if (t.label === PanelTitle) {
-      //       // window.activeTab(t);
-      //       return true;
-      //     }
-      //     return false;
-      //   });
-      // });
+      await this._panel.webview.postMessage({
+        type: 'update:mode',
+        ...options,
+      });
+      const tab = this._getIconifyTab();
+      if (!tab) throw new Error('impossible');
+      if (!tab.isActive) {
+        // 当前版本 vscode 暂不支持打开已经存在但不是激活状态的 tab。
+        // 但官方已经规划支持：https://github.com/microsoft/vscode/issues/188572
+        // 待 API 支持后，激活已经存在的 iconify-search tab。
+        void window.showInformationMessage(
+          `TODO: Active iconify-search tab when vscode api is ready`,
+        );
+        // window.activeTab(tab);
+      }
 
       return;
     }
-    this._initData.mode = options.mode;
-    this._initData.searchText = options.searchText ?? '';
 
     const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
 
@@ -133,20 +148,48 @@ export class IconifySearchPanel {
       dark: Uri.joinPath(this._extensionUri, 'resources', 'iconify.svg'),
       light: Uri.joinPath(this._extensionUri, 'resources', 'iconify.svg'),
     };
-    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
+    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview, options);
     this._panel.webview.onDidReceiveMessage(
       (message) => {
         switch (message.type) {
           case 'load':
             void this._loadIcons();
             break;
+          case 'insert':
+            void this._insertCode(message.code);
+            break;
+          case 'add-favor-icon': {
+            this._upFavorIcon('add', message.id);
+            break;
+          }
+          case 'rm-favor-icon': {
+            this._upFavorIcon('rm', message.id);
+            break;
+          }
         }
       },
       null,
       this._disposables,
     );
   }
+  private async _insertCode(code: string) {
+    const tab = this._getIconifyTab();
+    if (!tab) return;
+    await window.tabGroups.close(tab);
+    setTimeout(async () => {
+      const editor = window.activeTextEditor;
+      if (!editor) {
+        void window.showErrorMessage('no editor');
+        return;
+      }
+      // console.log('try insert', editor.selection);
+      void editor.edit((editBuilder) => {
+        editBuilder.insert(editor.selection.start, code);
+      });
+    }, 200);
+  }
   public dispose() {
+    // console.log('Dispose webview');
     // Clean up our resources
     this._panel?.dispose();
     this._panel = undefined;
@@ -158,7 +201,10 @@ export class IconifySearchPanel {
       }
     }
   }
-  private _getHtmlForWebview(webview: Webview) {
+  private _getHtmlForWebview(
+    webview: Webview,
+    options: { mode: WebviewInitData['mode']; searchText?: string },
+  ) {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
     const scriptUri = webview.asWebviewUri(
       Uri.joinPath(this._extensionUri, 'out', 'iconifyWebView.js'),
@@ -172,7 +218,10 @@ export class IconifySearchPanel {
     const nonce = getNonce();
 
     return replaceTpl(_tpl, {
-      initData: JSON.stringify(this._initData),
+      initData: JSON.stringify({
+        ...options,
+        ...getConf(),
+      }),
       cspSource: webview.cspSource,
       scriptUri,
       styleUri,

@@ -48,14 +48,22 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
     if (!el.current) return;
     const W = (el.current.children[0] as HTMLDivElement).offsetWidth;
     // console.log(W, el.current.offsetWidth);
-    const visualHeight = el.current.offsetHeight;
     let iconCountOfRow = Math.floor(W / (ICON_SIZE + ICON_GAP));
-    if (W - iconCountOfRow * (ICON_SIZE + ICON_GAP) === ICON_SIZE) {
+    if (W - iconCountOfRow * (ICON_SIZE + ICON_GAP) >= ICON_SIZE) {
       iconCountOfRow += 1;
     }
     const startRow = Math.floor(el.current.scrollTop / (ICON_SIZE + ICON_GAP));
+
+    const visualHeight = el.current.offsetHeight;
     const visualRowCount = Math.ceil(visualHeight / (ICON_SIZE + ICON_GAP));
     const iconStartIndex = iconCountOfRow * startRow;
+    // console.log(
+    //   iconCountOfRow,
+    //   startRow,
+    //   visualRowCount,
+    //   iconStartIndex,
+    //   visualRowCount * iconCountOfRow,
+    // );
     if (preIconStartIndex.current !== iconStartIndex || force) {
       preIconStartIndex.current = iconStartIndex;
       // console.log(iconStartIndex, visualRowCount, iconCountOfRow);
@@ -68,13 +76,14 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
   };
   useEffect(() => {
     if (!el.current) return;
-    const W = el.current.offsetWidth;
-    let rowC = Math.floor(W / (ICON_SIZE + ICON_GAP));
-    if (W - rowC * (ICON_SIZE + ICON_GAP) === ICON_SIZE) {
-      rowC += 1;
+    const W = (el.current.children[0] as HTMLDivElement).offsetWidth;
+    // console.log(W, el.current.offsetWidth);
+    let iconCountOfRow = Math.floor(W / (ICON_SIZE + ICON_GAP));
+    if (W - iconCountOfRow * (ICON_SIZE + ICON_GAP) >= ICON_SIZE) {
+      iconCountOfRow += 1;
     }
-    const rowN = Math.ceil(icons.length / rowC);
-    const totalHeight = (rowN - 1) * (ICON_SIZE + ICON_GAP) + ICON_SIZE;
+    const totalRows = Math.ceil(icons.length / iconCountOfRow);
+    const totalHeight = (totalRows + 1) * (ICON_SIZE + ICON_GAP);
     el.current.scrollTop = 0;
     setScrollHeight(totalHeight);
     // console.log('CCC', icons.length);
