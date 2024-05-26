@@ -4,7 +4,7 @@ import type { Disposable, Webview, WebviewPanel } from 'vscode';
 import { Uri, ViewColumn, l10n, window, workspace } from 'vscode';
 import _tpl from './iconifyPanel.html?raw';
 import { getNonce, replaceTpl } from './util';
-import type { Setting } from './common';
+import type { WebviewInitData } from './common';
 // import type { IconCategory } from './common';
 
 const PanelTitle = l10n.t('Iconify Icons');
@@ -18,19 +18,23 @@ function getConf() {
 export class IconifySearchPanel {
   public static readonly viewType = 'iconifySearch';
   private _panel?: WebviewPanel;
-  private _setting: Setting;
+  private _initData: WebviewInitData;
 
   private _disposables: Disposable[] = [];
 
   constructor(private readonly _extensionUri: Uri) {
-    this._setting = getConf();
-    workspace.onDidChangeConfiguration(() => {
-      this._setting = getConf();
-      void this._panel?.webview.postMessage({
-        type: 'load:setting',
-        setting: this._setting,
-      });
-    });
+    this._initData = {
+      searchText: '',
+      setting: getConf(),
+      mode: 'search',
+    };
+    // workspace.onDidChangeConfiguration(() => {
+    //   this._setting = getConf();
+    //   void this._panel?.webview.postMessage({
+    //     type: 'load:setting',
+    //     setting: this._setting,
+    //   });
+    // });
   }
 
   // private async _loadLogo() {
@@ -77,12 +81,6 @@ export class IconifySearchPanel {
       }
       return;
     }
-
-    await this._panel?.webview.postMessage({
-      type: 'load:setting',
-      setting: this._setting,
-    });
-    // const allGroups: IconCategory[] = [];
     const files = await fs.readdir(iconifyJsonDir);
     const GROUP_SIZE = 35;
     const groups = Math.ceil(files.length / GROUP_SIZE);
@@ -99,23 +97,8 @@ export class IconifySearchPanel {
         bufs: bufs.map((buf) => buf.buffer),
       });
     }
-
-    // console.log('send files', Date.now() - st);
-
-    // for await (const file of files) {
-    //   if (!file.endsWith('.json')) continue;
-    //   const buf = await fs.readFile(path.join(iconifyJsonDir, file));
-    //   await this._panel?.webview.postMessage({
-    //     type: 'load:file',
-    //     category: file.slice(0, file.length - 5),
-    //     buffer: buf.buffer,
-    //   });
-    // }
-    // await this._panel?.webview.postMessage({ type: 'load:file:end' });
-    // console.log('send end', Date.now() - st);
-    // return allGroups;
   }
-  public async show() {
+  public async show(options: { mode: WebviewInitData['mode']; searchText?: string }) {
     if (this._panel) {
       // 当前版本 vscode 支持激活打开 extenstion tab 后，查询并打开已经存在的 iconify-search tab
       // https://github.com/microsoft/vscode/issues/188572
@@ -134,6 +117,9 @@ export class IconifySearchPanel {
 
       return;
     }
+    this._initData.mode = options.mode;
+    this._initData.searchText = options.searchText ?? '';
+
     const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
 
     this._panel = window.createWebviewPanel(
@@ -186,6 +172,7 @@ export class IconifySearchPanel {
     const nonce = getNonce();
 
     return replaceTpl(_tpl, {
+      initData: JSON.stringify(this._initData),
       cspSource: webview.cspSource,
       scriptUri,
       styleUri,

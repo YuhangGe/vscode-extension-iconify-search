@@ -26,8 +26,23 @@
     "commands": [
       {
         "command": "iconify.search",
-        "title": "%iconifySearch.title%",
+        "title": "%iconifySearch.command.search%",
         "category": "Iconify"
+      },
+      {
+        "command": "iconify.view.all",
+        "title": "%iconifySearch.command.view.all%",
+        "category": "Iconify"
+      },
+      {
+        "command": "iconify.view.favorites",
+        "title": "%iconifySearch.command.view.favorites%",
+        "category": "Iconify"
+      },
+      {
+        "command": "iconify.insert.favorites",
+        "title": "%iconifySearch.command.insert.favorites%",
+        "category": "Iconfiy"
       }
     ],
     "configuration": [

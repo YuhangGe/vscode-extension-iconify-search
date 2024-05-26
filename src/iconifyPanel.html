@@ -9,17 +9,19 @@
     and only allow scripts that have a specific nonce.
   -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'none'; img-src ${cspSource} data:; style-src ${cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
+    content="default-src 'none'; img-src $cspSource$ data:; style-src $cspSource$ 'unsafe-inline'; script-src 'nonce-$nonce$';">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iconify Icons</title>
 
-  <link href="${styleUri}" rel="stylesheet" />
+  <link href="$styleUri$" rel="stylesheet" />
+
 </head>
 
 <body>
   <div id="root" class="w-full h-full"></div>
-  <script nonce="${nonce}" src="${scriptUri}"></script>
+  <script nonce="$nonce$">window.ICONIFY_INIT_DATA = $initData$;</script>
+  <script nonce="$nonce$" src="$scriptUri$"></script>
 </body>
 
 

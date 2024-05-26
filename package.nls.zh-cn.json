@@ -1,4 +1,7 @@
 {
-  "iconifySearch.title": "搜索图标",
+  "iconifySearch.command.search": "搜索图标",
+  "iconifySearch.command.view.all": "查看全部图标",
+  "iconifySearch.command.view.favorites": "查看我的收藏",
+  "iconifySearch.command.insert.favorites": "插入收藏图标",
   "settings.favorites": "配置分类 Tab 上优先排列的图标分类，比如 ant-design 或 material-symbols 等。"
 }

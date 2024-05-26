@@ -1,32 +1,9 @@
 /// <reference types="vite/client" />
 
-declare module '*.less' {
-  const ref: Record<string, string>;
-  export default ref;
-}
+import type { WebviewInitData } from '../common';
 
 /* IMAGES */
 declare module '*.svg' {
-  const ref: string;
-  export default ref;
-}
-
-declare module '*.bmp' {
-  const ref: string;
-  export default ref;
-}
-
-declare module '*.gif' {
-  const ref: string;
-  export default ref;
-}
-
-declare module '*.jpg' {
-  const ref: string;
-  export default ref;
-}
-
-declare module '*.jpeg' {
   const ref: string;
   export default ref;
 }
@@ -36,7 +13,8 @@ declare module '*.png' {
   export default ref;
 }
 
-declare module '*.mp3' {
-  const ref: string;
-  export default ref;
+export declare global {
+  interface Window {
+    ICONIFY_INIT_DATA: WebviewInitData;
+  }
 }

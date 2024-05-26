@@ -19,3 +19,8 @@ export interface IconCategory {
 export interface Setting {
   favors?: string[];
 }
+export interface WebviewInitData {
+  setting: Setting;
+  searchText: string;
+  mode: 'insert.favorites' | 'search' | 'view.all' | 'view.favorites';
+}

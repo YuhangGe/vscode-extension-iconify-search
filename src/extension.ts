@@ -43,17 +43,20 @@ export function activate(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand('iconify.search', async () => {
-      await iconifySearchPanel.show();
-
-      // const text = await readSearchText();
-
-      // if (!text?.trim()) {
-      //   return;
-      // }
-
-      // iconifySearchPanel.show();
-
-      // void window.showInformationMessage(`Got: ${matchedIcons.length}, ${hasMore}`);
+      const text = await readSearchText();
+      if (!text?.trim()) {
+        return;
+      }
+      await iconifySearchPanel.show({ mode: 'search', searchText: text });
+    }),
+    commands.registerCommand('iconify.view.all', async () => {
+      await iconifySearchPanel.show({ mode: 'view.all' });
+    }),
+    commands.registerCommand('iconify.view.favorites', async () => {
+      await iconifySearchPanel.show({ mode: 'view.favorites' });
+    }),
+    commands.registerCommand('iconify.insert.favorites', async () => {
+      await iconifySearchPanel.show({ mode: 'insert.favorites' });
     }),
   );
 }

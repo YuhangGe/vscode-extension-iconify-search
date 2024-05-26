@@ -1,4 +1,7 @@
 {
-  "iconifySearch.title": "Search Icons",
+  "iconifySearch.command.search": "Search Icons",
+  "iconifySearch.command.view.all": "View All Icons",
+  "iconifySearch.command.view.favorites": "View My Favorites",
+  "iconifySearch.command.insert.favorites": "Insert from My Favorites",
   "settings.favorites": "Configure the icon category for priority search, such as ant-design or mdi, etc."
 }

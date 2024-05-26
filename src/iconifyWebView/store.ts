@@ -2,9 +2,11 @@ import type { Icon, IconCategory } from '../common';
 import { sortedInsert } from './util';
 
 export const IconStore: {
+  favorites: Icon[];
   all: Map<string, IconCategory>;
   allFlat: Icon[];
 } = {
+  favorites: [],
   all: new Map(),
   allFlat: [],
 };
