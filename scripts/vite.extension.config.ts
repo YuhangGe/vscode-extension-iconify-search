@@ -16,10 +16,10 @@ export default defineConfig({
 
   build: {
     watch: watch ? {} : undefined,
-    minify: false,
+    minify: watch ? false : true,
     outDir: path.resolve(__dirname, '../out'),
     emptyOutDir: false,
-    sourcemap: true,
+    sourcemap: watch ? true : false,
     lib: {
       fileName: () => 'extension.cjs',
       entry: path.resolve(__dirname, `../src/extension.ts`),

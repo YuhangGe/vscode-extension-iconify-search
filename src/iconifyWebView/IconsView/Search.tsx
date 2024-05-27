@@ -19,7 +19,7 @@ export const Search: FC<{
     }, 600);
   };
   return (
-    <Space.Compact className='w-full mb-2'>
+    <Space.Compact className='mb-2 w-full'>
       <Input
         allowClear
         value={text}
@@ -37,7 +37,7 @@ export const Search: FC<{
           setText(t);
           onChange(t);
         }}
-        placeholder={t('Search Iconify Icons')}
+        placeholder={t('Search Icons')}
       />
       <Button
         type='primary'

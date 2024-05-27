@@ -2,8 +2,8 @@
   "iconifySearch.command.search": "Search Icons",
   "iconifySearch.command.view.all": "View All Icons",
   "iconifySearch.command.view.favorites": "View Favorite Icons",
-  "settings.favor.tabs": "全部图标页面上优先排列的图标分类 Tab，比如 ant-design 或 material-symbols 等。",
-  "settings.favor.icons": "我的收藏页面上展示的图标，需要 [category]:[name] 格式。",
-  "settings.favor.group": "全部图标页面上默认选中的图标分类 Tab。默认为空，配置为空则打开全部分类。",
-  "settings.code-type": "拷贝或插入图标代码时，使用的代码类型。"
+  "settings.favor.tabs": "Icon categories that are displyed first on tabs, need to be category such as ant-design or material-symbols, etc.",
+  "settings.favor.icons": "Icons in my favorites, need to be in the [category]:[name] format.",
+  "settings.favor.group": "Icon category selected by default on tabs, default is empty. If it's empty, the ALL category will be opened.",
+  "settings.code-type": "The code type used when copying or inserting icon code."
 }

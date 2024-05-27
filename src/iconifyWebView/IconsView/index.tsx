@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import type { Icon } from '../../common';
 import { simpleSearchIcons } from '../search';
 import { GROUP_ALL_KEY, globalStore } from '../store';
+import { t } from '../locale';
 import { Gallery } from './Gallery';
 import { Search } from './Search';
 
@@ -18,7 +19,7 @@ export const IconsView: FC = () => {
     }[]
   >([
     {
-      label: '全部',
+      label: t('ALL'),
       key: GROUP_ALL_KEY,
     },
   ]);
@@ -86,16 +87,16 @@ export const IconsView: FC = () => {
       {!!icons.length && <Gallery icons={icons} />}
       {!icons.length && groupTab !== GROUP_ALL_KEY && (
         <div
-          className='mt-2 py-1 text-center cursor-pointer hover:text-hover text-xs'
+          className='mt-2 cursor-pointer py-1 text-center text-xs hover:text-hover'
           onClick={() => {
             selectTab(GROUP_ALL_KEY);
           }}
         >
-          暂无图标，点击查看全部图标
+          {t('No icons yet, click to view all icons')}
         </div>
       )}
       {!icons.length && groupTab === GROUP_ALL_KEY && (
-        <div className='mt-2 py-1 text-center text-xs'>暂无图标</div>
+        <div className='mt-2 py-1 text-center text-xs'>{t('No Icons')}</div>
       )}
     </>
   );

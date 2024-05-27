@@ -35,6 +35,7 @@ export interface SettingsData {
 }
 
 export interface WebviewInitData extends SettingsData {
+  locale: string;
   searchText: string;
   mode: 'search' | 'view.all' | 'view.favor';
 }

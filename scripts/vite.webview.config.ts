@@ -24,7 +24,7 @@ export default defineConfig({
 
     outDir: path.resolve(__dirname, '../out'),
     emptyOutDir: false,
-    sourcemap: true,
+    sourcemap: watch ? true : false,
     lib: {
       name: `${view}WebView`,
       entry: {

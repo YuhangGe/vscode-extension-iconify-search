@@ -23,7 +23,7 @@ const IcList: FC<{ translateY: number; renderIcons: Icon[] }> = ({ translateY, r
 
   return (
     <div
-      className='relative w-full overflow-hidden flex flex-wrap will-change-transform'
+      className='relative flex w-full flex-wrap overflow-hidden will-change-transform'
       style={{
         gap: ICON_GAP,
         // height: innerVisualHeight,
@@ -98,12 +98,12 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
   return (
     <div
       ref={el}
-      className='w-full relative flex-1 h-0 overflow-y-scroll select-none'
+      className='relative h-0 w-full flex-1 select-none overflow-y-scroll'
       onScroll={() => {
         handleScroll();
       }}
     >
-      <div className='w-full relative' style={{ height: scrollHeight }}>
+      <div className='relative w-full' style={{ height: scrollHeight }}>
         <IcList translateY={translateY} renderIcons={renderIcons} />
       </div>
     </div>

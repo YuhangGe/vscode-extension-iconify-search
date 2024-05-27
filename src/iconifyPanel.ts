@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import type { Disposable, Tab, Webview, WebviewPanel } from 'vscode';
-import { Uri, ViewColumn, l10n, window, workspace } from 'vscode';
+import { Uri, ViewColumn, env, l10n, window, workspace } from 'vscode';
 import _tpl from './iconifyPanel.html?raw';
 import { getNonce, replaceTpl } from './util';
 import type { SettingsData, WebviewInitData } from './common';
@@ -247,6 +247,7 @@ export class IconifySearchPanel {
     return replaceTpl(_tpl, {
       initData: JSON.stringify({
         ...options,
+        locale: env.language,
         favorTabs: getConfFavorTabs(),
         favorIcons: getConfFavorIcons(),
         favorGroup: getConf(FavorGroup, ''),

@@ -17,7 +17,12 @@ function loadL10n(loc: string): Record<string, string> | undefined {
 }
 
 function getDefaultLocale() {
-  let lang = (localStorage.getItem('ENV_LANGUAGE') || navigator.language || 'en')
+  let lang = (
+    window.ICONIFY_INIT_DATA.locale ||
+    localStorage.getItem('ENV_LANGUAGE') ||
+    navigator.language ||
+    'en'
+  )
     .toLowerCase()
     .replace(/_/g, '-');
   if (lang === 'zh-cn') {
@@ -27,6 +32,7 @@ function getDefaultLocale() {
   return lang;
 }
 export const lang = getDefaultLocale();
+
 export const locale = loadAntdLocale(lang);
 const l10n = loadL10n(lang);
 

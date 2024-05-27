@@ -20,7 +20,7 @@ export const FavoritesView: FC = () => {
 
   return (
     <div
-      className='flex flex-wrap w-full mt-4'
+      className='mt-4 flex w-full flex-wrap'
       style={{
         gap: ICON_GAP,
       }}

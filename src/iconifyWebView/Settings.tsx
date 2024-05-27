@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import type { SettingsData } from '../common';
 import { globalStore } from './store';
 import { vscode } from './vscode';
+import { lang, t } from './locale';
 
 const CodeTypeOptions = [
   {
@@ -67,17 +68,17 @@ export const SettingsContent: FC<{
       initialValues={{
         codeType: globalStore.get('codeType'),
         favorTabs: globalStore.get('favorTabs'),
-        favorGroup: globalStore.get('favorGroup'),
+        favorGroup: globalStore.get('favorGroup') || undefined,
       }}
     >
-      <Form.Item label='拷贝代码类型' name='codeType'>
+      <Form.Item label={t('Type of Code')} name='codeType'>
         <Select options={CodeTypeOptions} />
       </Form.Item>
-      <Form.Item label='优先展示分类' name='favorTabs'>
+      <Form.Item label={t('Tabs Displyed First')} name='favorTabs'>
         <Select options={GroupOptions} mode='multiple' />
       </Form.Item>
-      <Form.Item label='默认打开分类' name='favorGroup'>
-        <Select options={GroupOptions} placeholder='全部' allowClear />
+      <Form.Item label={t('Default Open Tab')} name='favorGroup'>
+        <Select options={GroupOptions} placeholder={t('ALL')} allowClear />
       </Form.Item>
       <div className='flex justify-end gap-4'>
         <Button
@@ -85,7 +86,7 @@ export const SettingsContent: FC<{
             onClose();
           }}
         >
-          取消
+          {t('Cancel')}
         </Button>
         <Button
           onClick={() => {
@@ -103,7 +104,7 @@ export const SettingsContent: FC<{
           }}
           type='primary'
         >
-          确认
+          {t('Confirm')}
         </Button>
       </div>
     </Form>
@@ -111,7 +112,14 @@ export const SettingsContent: FC<{
 };
 export const SettingsModal: FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
   return (
-    <Modal destroyOnClose footer={null} open={open} onCancel={() => onClose()} title='配置'>
+    <Modal
+      width={lang === 'en' ? 600 : 450}
+      destroyOnClose
+      footer={null}
+      open={open}
+      onCancel={() => onClose()}
+      title={t('Settings')}
+    >
       <SettingsContent onClose={onClose} />
     </Modal>
   );

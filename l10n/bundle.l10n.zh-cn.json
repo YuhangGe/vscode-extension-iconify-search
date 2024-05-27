@@ -1,4 +1,18 @@
 {
   "Iconify Icons": "Iconify 图标",
-  "Search Iconify Icons": "搜索 Iconify 图标"
+  "Search Icons": "搜索图标",
+  "ALL ICONS": "全部图标",
+  "MY FAVORITES": "我的收藏",
+  "ALL": "全部",
+  "Prefix:": "前缀：",
+  "Category:": "分类：",
+  "No Icons": "无图标",
+  "No icons yet, click to view all icons": "暂无图标，点击查看全部图标",
+  "Confirm": "确认",
+  "Cancel": "取消",
+  "Settings": "配置",
+  "Type of Code": "拷贝代码类型",
+  "Tabs Displyed First": "优先展示分类",
+  "Default Open Tab": "默认打开分类",
+  "Copied!": "复制成功"
 }

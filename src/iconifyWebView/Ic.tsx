@@ -5,6 +5,7 @@ import { copyToClipboard } from './util';
 import { globalStore, updateFavorIcon } from './store';
 import { getIconCode } from './code';
 import { vscode } from './vscode';
+import { t } from './locale';
 
 const IcTooltipTitle: FC<{ icon: Icon }> = ({ icon }) => {
   const [favorIcons] = globalStore.useStore('favorIcons');
@@ -19,7 +20,7 @@ const IcTooltipTitle: FC<{ icon: Icon }> = ({ icon }) => {
       <Button
         size='small'
         type='text'
-        className='text-orange hover:text-orange flex items-center justify-center'
+        className='flex items-center justify-center text-orange hover:text-orange'
         onClick={() => {
           updateFavorIcon(!isFavor ? 'add' : 'rm', icon);
         }}
@@ -39,9 +40,9 @@ const IcTooltipContent: FC<{ icon: Icon }> = ({ icon }) => {
   return (
     <div>
       <div className='text-sm opacity-70'>
-        前缀：
+        {t('Prefix:')}
         <span
-          className='hover:underline cursor-pointer'
+          className='cursor-pointer hover:underline'
           onClick={() => {
             globalStore.set('topTab', 'all');
             globalStore.set('groupTab', icon.category);
@@ -51,9 +52,9 @@ const IcTooltipContent: FC<{ icon: Icon }> = ({ icon }) => {
         </span>
       </div>
       <div className='text-sm opacity-70'>
-        分类：
+        {t('Category:')}
         <span
-          className='hover:underline cursor-pointer'
+          className='cursor-pointer hover:underline'
           onClick={() => {
             globalStore.set('topTab', 'all');
             globalStore.set('groupTab', icon.category);
@@ -107,11 +108,11 @@ export const Ic: FC<{ icon: Icon }> = ({ icon }) => {
   return (
     <IcTooltip icon={icon} open={open} onOpenChange={(v) => setOpen(v)}>
       <div
-        className='flex flex-col [&>.ctrl]:hidden [&>.ctrl]:hover:block cursor-pointer relative'
+        className='relative flex cursor-pointer flex-col [&>.ctrl]:hidden [&>.ctrl]:hover:block'
         onClick={() => {
           setOpen(false);
           void copyToClipboard(getIconCode(icon, globalStore.get('codeType'))).then(() => {
-            void message.success('Copied!');
+            void message.success(t('Copied!'));
           });
         }}
         // onDoubleClick={() => {
@@ -122,14 +123,14 @@ export const Ic: FC<{ icon: Icon }> = ({ icon }) => {
         }}
       >
         <IcImg
-          className='block flex-shrink-0 w-full [&>svg]:size-full'
+          className='block w-full shrink-0 [&>svg]:size-full'
           style={{ height: ICON_SIZE }}
           icon={icon}
         />
-        <div className='flex-1 flex items-center h-4'>
+        <div className='flex h-4 flex-1 items-center'>
           <span className='w-full truncate text-center'>{icon.name}</span>
         </div>
-        <div className='ctrl absolute top-[calc((100%-16px)/2)] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+        <div className='ctrl absolute left-1/2 top-[calc((100%-16px)/2)] -translate-x-1/2 -translate-y-1/2'>
           <Button.Group>
             <Button
               size='small'
