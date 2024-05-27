@@ -4,4 +4,8 @@ src/**
 scripts/**
 .gitignore
 tsconfig.json
-tslint.json
+tsconfig.node.json
+*.js
+*.mjs
+*.cjs
+node_modules
