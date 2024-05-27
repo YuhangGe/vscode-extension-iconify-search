@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import type { Disposable, Tab, Webview, WebviewPanel } from 'vscode';
 import { Uri, ViewColumn, env, l10n, window, workspace } from 'vscode';
+import { t } from '@vscode/l10n';
 import _tpl from './iconifyPanel.html?raw';
 import { getNonce, replaceTpl } from './util';
 import type { SettingsData, WebviewInitData } from './common';
@@ -87,24 +88,20 @@ export class IconifySearchPanel {
   private async _loadIcons() {
     const root = workspace.workspaceFolders?.[0].uri.fsPath;
     if (!root) {
-      void window.showErrorMessage('Please Open a File to Insert Iconify Icon');
+      void window.showErrorMessage(t('Please open a directory to use Iconify Search extension'));
       return;
     }
     const iconifyJsonDir = path.join(root, 'node_modules', '@iconify/json', 'json');
     try {
       const st = await fs.stat(iconifyJsonDir);
       if (!st.isDirectory()) {
-        void window.showErrorMessage(
-          '@iconify/json not found, please install it by npm/pnpm/yarn first.',
-        );
+        void window.showErrorMessage(t('Please install "@iconify/json" by npm/pnpm/yarn.'));
         return;
       }
     } catch (ex) {
       console.error(ex);
       if ((ex as { code: string }).code === 'ENOENT') {
-        void window.showErrorMessage(
-          '@iconify/json not found, please install it by npm/pnpm/yarn first.',
-        );
+        void window.showErrorMessage(t('Please install "@iconify/json" by npm/pnpm/yarn.'));
       } else {
         void window.showErrorMessage(`${ex}`);
       }
@@ -150,7 +147,7 @@ export class IconifySearchPanel {
         // 但官方已经规划支持：https://github.com/microsoft/vscode/issues/188572
         // 待 API 支持后，激活已经存在的 iconify-search tab。
         void window.showInformationMessage(
-          `TODO: Active iconify-search tab when vscode api is ready`,
+          t(`TODO: Active Iconify Search tab when VSCode Extension API is ready`),
         );
         // window.activeTab(tab);
       }
@@ -206,7 +203,7 @@ export class IconifySearchPanel {
     setTimeout(async () => {
       const editor = window.activeTextEditor;
       if (!editor) {
-        void window.showErrorMessage('no editor');
+        // void window.showErrorMessage('no editor');
         return;
       }
       // console.log('try insert', editor.selection);

@@ -1,52 +1,41 @@
-# TODO
+# Iconify Search
 
-* 搜索 debounce 自动生效（同时可回车）[done]
-* 配置默认打开的分类 tab（不配置为全部）[done]
-* vscode command 向 webview 下发搜索关键字。[done]
-* webview 中实现配置弹窗，和 vscode 配置同步，可交互式配置。
-* Copy 类型选择（svg, react, vue, html, tailwindcss, tailwindcss-react）[done]
-* Tooltip 改 popover，可点击跳转到分类，支持搜藏操作，点击后关闭 popover。[done]
-* Header.tsx 改成 forwardRef，支持切换到全部 tab[done]
-* 双击关闭当前 tab 并自动把代码插入到被激活的 tab 里的文本中。[done]
-* 优化交互，不使用双击交互。图标增加操作按钮蒙层。可能需要适当调大图标大小。[done]
-* 我的搜藏页面。[done]
-* 多语言
-* Readme 文档完善
+Search [Iconify](https://icon-sets.iconify.design/) icons directly in VSCode and insert the icons into the code editor.
+
+在 VSCode 中直接搜索 [Iconify](https://icon-sets.iconify.design/) 图标，并可将图标插入到代码编辑器中。
+
+## Usage / 使用方法
+
+This extension needs to read all icon data in the `@iconify/json` package. Please install the `@iconify/json` dependency through `npm/pnpm/yarn` under any project you want to user iconify icons.
+
+当前扩展需要读取 `@iconify/json` 包里的所有图标数据。请在项目里通过 `npm/pnpm/yarn` 安装 `@iconify/json` 依赖。
+
+## Features / 功能
+
+* 查看和搜索所有 Iconify 图标。
+* 收藏任何图标，并可以快捷查看所有收藏图标。
+* 将图标的代码拷贝到剪切板。
+* 直接将图标的代码插入到当前激活的文本编辑器。
 
 
-# QuickInput Sample
+## Screenshot / 录屏示例
 
-This is a sample extension that shows the QuickInput UI and usage of the QuickInput API.
+#### Search Icons / 搜索图标
 
-It is not intended as a production quality extension.
+#### View All Icons / 查看全部图标
 
-- Open the command palette
-- Run "Quick Input Samples"
-- Pick one of the samples and see it run
+#### Copy Icon Code to Clipboard / 复制图标代码到剪贴板
 
-## Demo
+#### Insert Icon Code to Text Editor / 插入图标代码到文本
 
-![Multi-step sample](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/main/quickinput-sample/preview.gif)
+#### Save to My Favorites / 收藏图标
 
-## How it works
+## Limitation / 限制
 
-- The extension uses the [`QuickPick`](https://code.visualstudio.com/api/references/vscode-api#QuickPick) and [`InputBox`](https://code.visualstudio.com/api/references/vscode-api#InputBox) API to show a UI for user input.
-- Registers a command via `package.json` that will trigger the quick input
+After switching from the Iconify Search Extension tab to other tabs (such as other text code tab), and executing Iconify Search Extension commands through VSCode Command again, it is unable to automatically active the Iconify Search Extension tab.
 
-## VS Code API
+从 Iconify 图标界面切换到其它 Tab（比如其它代码文件）后，再次通过 VSCode Command 执行 Iconify Search 扩展的命令后，无法自动切换回 Iconify 图标界面。
 
-### `vscode` module
+This is due to the fact that VSCode Extension API currently does not support activating the Webview Panel created by Extension. The official already has relevant issue and will support it in the feature. For details, please see: https://github.com/microsoft/vscode/issues/188572
 
-- [`QuickPick`](https://code.visualstudio.com/api/references/vscode-api#QuickPick)
-- [`InputBox`](https://code.visualstudio.com/api/references/vscode-api#InputBox)
-- [`window.createQuickPick`](https://code.visualstudio.com/api/references/vscode-api#window.createQuickPick)
-- [`window.showQuickPick`](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)
-- [`window.createInputBox`](https://code.visualstudio.com/api/references/vscode-api#window.createInputBox)
-- [`window.showInputBox`](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)
-
-# How to run locally
-
-- Run `npm install` in terminal to install dependencies
-- Run the `Run Extension` target in the Debug View. This will:
-	- Start a task `npm: watch` to compile the code
-	- Run the extension in a new VS Code window
+这是受 VSCode 扩展接口当前暂不支持激活由 Extension 创建的 Webview Panel 所致。官方已经有相关的 Issue 以及功能迭代计划，详见：https://github.com/microsoft/vscode/issues/188572

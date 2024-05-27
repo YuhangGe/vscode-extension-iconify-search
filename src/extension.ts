@@ -7,19 +7,11 @@ import { l10n, window, commands } from 'vscode';
 import type { ExtensionContext } from 'vscode';
 import { IconifySearchPanel } from './iconifyPanel';
 
-// class MyButton implements QuickInputButton {
-//   constructor(
-//     public iconPath: { light: Uri; dark: Uri },
-//     public tooltip: string,
-//   ) {}
-// }
-
 function readSearchText() {
   return new Promise<string | undefined>((resolve) => {
     let value = '';
     const input = window.createInputBox();
     input.placeholder = l10n.t('Search Iconify Icons');
-    // input.buttons = [createResourceGroupButton, createResourceGroupButton2];
     input.onDidChangeValue((v) => {
       value = v;
     });
@@ -36,10 +28,6 @@ function readSearchText() {
 
 export function activate(context: ExtensionContext) {
   const iconifySearchPanel = new IconifySearchPanel(context.extensionUri);
-
-  // context.subscriptions.push(
-  //   window.registerWebviewViewProvider(IconfiyViewProvider.viewType, iconifyViewProvider),
-  // );
 
   context.subscriptions.push(
     commands.registerCommand('iconify.search', async () => {

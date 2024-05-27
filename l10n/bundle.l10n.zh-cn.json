@@ -14,5 +14,8 @@
   "Type of Code": "拷贝代码类型",
   "Tabs Displyed First": "优先展示分类",
   "Default Open Tab": "默认打开分类",
-  "Copied!": "复制成功"
+  "Copied!": "复制成功",
+  "Please open a directory to use Iconify Search extension": "请打开某个目录/项目后使用 Iconify Search 扩展",
+  "TODO: Active Iconify Search tab when VSCode Extension API is ready": "TODO: 待 VSCode 扩展 API 支持激活 Iconify Search 的 Tab",
+  "Please install \"@iconify/json\" by npm/pnpm/yarn.": "请通过 npm/pnpm/yarn 安装 @iconify/json 依赖"
 }

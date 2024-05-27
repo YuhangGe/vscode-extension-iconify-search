@@ -3,7 +3,7 @@
   "displayName": "Iconify Search",
   "description": "Search Iconify Icons in VS Code",
   "version": "0.0.1",
-  "publisher": "abeyuhang",
+  "publisher": "YuhangGe",
   "private": true,
   "type": "module",
   "license": "MIT",
