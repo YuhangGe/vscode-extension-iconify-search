@@ -20,15 +20,16 @@ This extension needs to read all icon data in the `@iconify/json` package. Pleas
 
 ## Screenshot / 录屏示例
 
+#### View All Icons / 查看全部图标
+
 #### Search Icons / 搜索图标
 
-#### View All Icons / 查看全部图标
+#### Save to My Favorites / 收藏图标
 
 #### Copy Icon Code to Clipboard / 复制图标代码到剪贴板
 
 #### Insert Icon Code to Text Editor / 插入图标代码到文本
 
-#### Save to My Favorites / 收藏图标
 
 ## Limitation / 限制
 
