@@ -5,36 +5,35 @@ import { parseJsonBuffer } from './IconsView/helper';
 import { vscode } from './vscode';
 
 export const GROUP_ALL_KEY = '--all--';
-export interface GlobalStore extends WebviewInitData {
+export interface WebviewState {
   darkMode: boolean;
-  all: Map<string, IconCategory>;
-  allFlat: Icon[];
   topTab: 'all' | 'favor';
   groupTab: string;
 }
-
-const initData = window.ICONIFY_INIT_DATA;
-let initState: Partial<GlobalStore> = vscode.getState() ?? {};
-
-function getData() {
-  return {
-    mode: initData.mode,
-    searchText: initState.searchText ?? initData.searchText,
-    topTab:
-      initState.topTab ??
-      (initData.mode === 'insert.favorites' || initData.mode === 'view.favorites'
-        ? 'favor'
-        : 'all'),
-    groupTab: initState.groupTab ?? GROUP_ALL_KEY,
+export type GlobalStore = WebviewState &
+  WebviewInitData & {
+    all: Map<string, IconCategory>;
+    allFlat: Icon[];
   };
+
+let initState = vscode.getState() as WebviewState & WebviewInitData;
+// console.log('INIT STATE', initState);
+if (!initState) {
+  const initData = window.ICONIFY_INIT_DATA;
+  initState = {
+    ...initData,
+    darkMode: bodyHasDark(),
+    topTab: initData.mode === 'view.favor' ? 'favor' : 'all',
+    groupTab: initData.favorGroup || GROUP_ALL_KEY,
+  };
+  vscode.setState(initState);
+  // console.log('INIT STATE22', initState);
 }
+
 export const globalStore = createStore<GlobalStore>({
-  darkMode: bodyHasDark(),
+  ...initState,
   all: new Map(),
   allFlat: [],
-  favorIcons: initData.favorIcons,
-  favorTabs: initData.favorTabs,
-  ...getData(),
 });
 if (globalStore.get('darkMode')) {
   document.documentElement.classList.add('dark');
@@ -67,12 +66,15 @@ const onMessage = (evt: MessageEvent) => {
     }
     case 'update:mode': {
       const options = evt.data as WebviewInitData;
-      initState = {};
-      vscode.setState(initState);
-      initData.mode = options.mode;
-      initData.searchText = options.searchText ?? '';
-      const data = getData();
-      Object.entries(data).forEach(([prop, value]) => {
+
+      globalStore.set('mode', options.mode);
+      globalStore.set('searchText', options.searchText ?? '');
+      globalStore.set('topTab', options.mode === 'view.favor' ? 'favor' : 'all');
+
+      break;
+    }
+    case 'update:settings': {
+      Object.entries(evt.data as GlobalStore).forEach(([prop, value]) => {
         globalStore.set(prop as keyof GlobalStore, value);
       });
       break;
@@ -96,15 +98,9 @@ export function updateFavorIcon(op: 'add' | 'rm', icon: Icon) {
   globalStore.set('favorIcons', favorIcons.slice());
 }
 
-globalStore.hook('topTab', (v) => {
-  initState.topTab = v;
-  vscode.setState(initState);
-});
-globalStore.hook('groupTab', (v) => {
-  initState.groupTab = v;
-  vscode.setState(initState);
-});
-globalStore.hook('searchText', (v) => {
-  initState.searchText = v;
-  vscode.setState(initState);
+['topTab', 'mode', 'groupTab', 'searchText', 'codeType', 'favorTabs', 'favorGroup'].forEach((p) => {
+  globalStore.hook(p as keyof GlobalStore, (v) => {
+    (initState as unknown as Record<string, unknown>)[p] = v;
+    vscode.setState(initState);
+  });
 });

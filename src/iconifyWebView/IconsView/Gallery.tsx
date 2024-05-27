@@ -83,7 +83,7 @@ export const Gallery: FC<{ icons: Icon[] }> = ({ icons }) => {
       iconCountOfRow += 1;
     }
     const totalRows = Math.ceil(icons.length / iconCountOfRow);
-    const totalHeight = (totalRows + 1) * (ICON_SIZE + ICON_GAP);
+    const totalHeight = (totalRows + 2) * (ICON_SIZE + ICON_GAP);
     el.current.scrollTop = 0;
     setScrollHeight(totalHeight);
     // console.log('CCC', icons.length);

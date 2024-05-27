@@ -3,6 +3,7 @@ import { App, Button, Popover } from 'antd';
 import type { Icon } from '../common';
 import { copyToClipboard } from './util';
 import { globalStore, updateFavorIcon } from './store';
+import { getIconCode } from './code';
 import { vscode } from './vscode';
 
 const IcTooltipTitle: FC<{ icon: Icon }> = ({ icon }) => {
@@ -97,28 +98,25 @@ export const IcImg: FC<{ icon: Icon; className?: string; style?: CSSProperties }
   );
 };
 
-export const ICON_SIZE = 56;
+export const ICON_SIZE = 64;
 export const ICON_GAP = 16;
 
-function getIconCode(icon: Icon) {
-  return `<span className="icon-[${icon.category}--${icon.name}]"></span>`;
-}
 export const Ic: FC<{ icon: Icon }> = ({ icon }) => {
   const { message } = App.useApp();
   const [open, setOpen] = useState(false);
   return (
     <IcTooltip icon={icon} open={open} onOpenChange={(v) => setOpen(v)}>
       <div
-        className='flex flex-col hover:text-blue cursor-pointer'
+        className='flex flex-col [&>.ctrl]:hidden [&>.ctrl]:hover:block cursor-pointer relative'
         onClick={() => {
           setOpen(false);
-          void copyToClipboard(getIconCode(icon)).then(() => {
+          void copyToClipboard(getIconCode(icon, globalStore.get('codeType'))).then(() => {
             void message.success('Copied!');
           });
         }}
-        onDoubleClick={() => {
-          vscode.postMessage({ type: 'insert', code: getIconCode(icon) });
-        }}
+        // onDoubleClick={() => {
+        //
+        // }}
         style={{
           width: ICON_SIZE,
         }}
@@ -130,6 +128,28 @@ export const Ic: FC<{ icon: Icon }> = ({ icon }) => {
         />
         <div className='flex-1 flex items-center h-4'>
           <span className='w-full truncate text-center'>{icon.name}</span>
+        </div>
+        <div className='ctrl absolute top-[calc((100%-16px)/2)] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+          <Button.Group>
+            <Button
+              size='small'
+              type='primary'
+              icon={<span className='icon-[ant-design--copy-outlined]'></span>}
+            />
+            <Button
+              size='small'
+              type='primary'
+              onClick={(evt) => {
+                evt.stopPropagation();
+                evt.preventDefault();
+                vscode.postMessage({
+                  type: 'insert',
+                  code: getIconCode(icon, globalStore.get('codeType')),
+                });
+              }}
+              icon={<span className='icon-[material-symbols--code]'></span>}
+            />
+          </Button.Group>
         </div>
       </div>
     </IcTooltip>

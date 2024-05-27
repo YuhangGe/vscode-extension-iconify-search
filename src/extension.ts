@@ -53,10 +53,7 @@ export function activate(context: ExtensionContext) {
       await iconifySearchPanel.show({ mode: 'view.all' });
     }),
     commands.registerCommand('iconify.view.favorites', async () => {
-      await iconifySearchPanel.show({ mode: 'view.favorites' });
-    }),
-    commands.registerCommand('iconify.insert.favorites', async () => {
-      await iconifySearchPanel.show({ mode: 'insert.favorites' });
+      await iconifySearchPanel.show({ mode: 'view.favor' });
     }),
   );
 }

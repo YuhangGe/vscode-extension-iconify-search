@@ -4,20 +4,27 @@ import type { Disposable, Tab, Webview, WebviewPanel } from 'vscode';
 import { Uri, ViewColumn, l10n, window, workspace } from 'vscode';
 import _tpl from './iconifyPanel.html?raw';
 import { getNonce, replaceTpl } from './util';
-import type { WebviewInitData } from './common';
+import type { SettingsData, WebviewInitData } from './common';
 // import type { IconCategory } from './common';
 
 const PanelTitle = l10n.t('Iconify Icons');
 
-function getConf() {
-  const conf = workspace.getConfiguration('iconifySearch');
-  return {
-    favorTabs: conf.get('favor-tabs', []),
-    favorIcons: conf.get('favor-icons', []),
-  };
+const ExtensionId = 'iconifySearch';
+const FavorTabs = 'favorTabs';
+const FavorIcons = 'favorIcons';
+const FavorGroup = 'favorGroup';
+const CodeType = 'codeType';
+
+function getConf<T>(key: string, defaultValue: T) {
+  return (workspace.getConfiguration(ExtensionId)?.get(key) ?? defaultValue) as T;
 }
+function setConf<T>(key: string, value: T) {
+  return workspace.getConfiguration(ExtensionId)?.update(key, value);
+}
+const getConfFavorTabs = () => getConf<string[]>(FavorTabs, []);
+const getConfFavorIcons = () => getConf<string[]>(FavorIcons, []);
 export class IconifySearchPanel {
-  public static readonly viewType = 'iconifySearch';
+  public static readonly viewType = ExtensionId;
   private _panel?: WebviewPanel;
 
   private _disposables: Disposable[] = [];
@@ -51,6 +58,12 @@ export class IconifySearchPanel {
   //   };
   //   return this._logo;
   // }
+  private async _saveSettings(data: SettingsData) {
+    const entries = Object.entries(data);
+    for await (const ent of entries) {
+      await setConf(ent[0], ent[1]);
+    }
+  }
   private _getIconifyTab(): Tab | undefined {
     let tab = undefined;
     window.tabGroups.all.some((tg) => {
@@ -59,8 +72,8 @@ export class IconifySearchPanel {
     });
     return tab;
   }
-  private _upFavorIcon(op: 'add' | 'rm', id: string) {
-    const fics: string[] = workspace.getConfiguration('iconifySearch').get('favor-icons', []);
+  private async _upFavorIcon(op: 'add' | 'rm', id: string) {
+    const fics = getConfFavorIcons();
     const idx = fics.indexOf(id);
     if (op === 'add') {
       if (idx >= 0) return;
@@ -69,7 +82,7 @@ export class IconifySearchPanel {
       if (idx < 0) return;
       fics.splice(idx, 1);
     }
-    void workspace.getConfiguration('iconifySearch').update('favor-icons', fics);
+    await setConf(FavorIcons, fics);
   }
   private async _loadIcons() {
     const root = workspace.workspaceFolders?.[0].uri.fsPath;
@@ -98,13 +111,23 @@ export class IconifySearchPanel {
       return;
     }
     const files = await fs.readdir(iconifyJsonDir);
+    // 优先加载搜藏的图标分类
+    const favorFiles = getConfFavorTabs()
+      .map((t) => `${t}.json`)
+      .filter((f) => files.includes(f));
+    const allFiles =
+      favorFiles.length > 0 ? [...new Set(favorFiles.concat(files)).values()] : files;
+    if (files.length !== allFiles.length) {
+      throw new Error('impossible');
+    }
+
     const GROUP_SIZE = 35;
-    const groups = Math.ceil(files.length / GROUP_SIZE);
+    const groups = Math.ceil(allFiles.length / GROUP_SIZE);
     // const st = Date.now();
     // console.log('send start');
     for (let i = 0; i < groups; i++) {
       const bufs = await Promise.all(
-        files.slice(i * GROUP_SIZE, (i + 1) * GROUP_SIZE).map((f) => {
+        allFiles.slice(i * GROUP_SIZE, (i + 1) * GROUP_SIZE).map((f) => {
           return fs.readFile(path.join(iconifyJsonDir, f));
         }),
       );
@@ -159,11 +182,15 @@ export class IconifySearchPanel {
             void this._insertCode(message.code);
             break;
           case 'add-favor-icon': {
-            this._upFavorIcon('add', message.id);
+            void this._upFavorIcon('add', message.id);
             break;
           }
           case 'rm-favor-icon': {
-            this._upFavorIcon('rm', message.id);
+            void this._upFavorIcon('rm', message.id);
+            break;
+          }
+          case 'save:settings': {
+            void this._saveSettings(message.data);
             break;
           }
         }
@@ -220,7 +247,10 @@ export class IconifySearchPanel {
     return replaceTpl(_tpl, {
       initData: JSON.stringify({
         ...options,
-        ...getConf(),
+        favorTabs: getConfFavorTabs(),
+        favorIcons: getConfFavorIcons(),
+        favorGroup: getConf(FavorGroup, ''),
+        codeType: getConf(CodeType, ''),
       }),
       cspSource: webview.cspSource,
       scriptUri,

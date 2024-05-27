@@ -44,7 +44,7 @@
       {
         "title": "Iconify Search",
         "properties": {
-          "iconifySearch.favor-tabs": {
+          "iconifySearch.favorTabs": {
             "type": "array",
             "items": {
               "type": "string",
@@ -53,7 +53,7 @@
             "default": [],
             "description": "%settings.favor.tabs%"
           },
-          "iconifySearch.favor-icons": {
+          "iconifySearch.favorIcons": {
             "type": "array",
             "items": {
               "type": "string",
@@ -61,6 +61,27 @@
             },
             "default": [],
             "description": "%settings.favor.icons%"
+          },
+          "iconifySearch.favorGroup": {
+            "type": "string",
+            "default": "",
+            "description": "%settings.favor.group%"
+          },
+          "iconifySearch.codeType": {
+            "type": "string",
+            "default": "tailwindcss-react",
+            "enum": [
+              "svg",
+              "react",
+              "vue",
+              "tailwindcss",
+              "tailwindcss-react",
+              "iconify-icon",
+              "unplugin-icons",
+              "unocss",
+              "unocss-react"
+            ],
+            "description": "%settings.code-type%"
           }
         }
       }

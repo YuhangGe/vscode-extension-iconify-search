@@ -2,6 +2,8 @@
   "iconifySearch.command.search": "搜索圖標",
   "iconifySearch.command.view.all": "查看全部圖標",
   "iconifySearch.command.view.favorites": "查看收藏圖標",
-  "settings.favor.tabs": "配置分類 Tab 上優先排列的圖標分類，比如 ant-design 或 material-symbols 等。推薦在搜索圖標的界面上可視化配置。",
-  "settings.favor.icons": "配置放入到我的收藏中的圖標，需要 [category]:[name] 格式。推薦在搜索圖標的界面上可視化配置。"
+  "settings.favor.tabs": "全部圖標頁面上優先排列的圖標分類 Tab，比如 ant-design 或 material-symbols 等。",
+  "settings.favor.icons": "我的收藏頁面上展示的圖標，需要 [category]:[name] 格式。",
+  "settings.favor.group": "全部圖標頁面上默認選中的圖標分類 Tab。默認為空，配置為空則打開全部分類。",
+  "settings.code-type": "拷貝或插入圖標代碼時，使用的代碼類型。"
 }

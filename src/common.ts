@@ -16,9 +16,25 @@ export interface IconCategory {
   icons: Icon[];
 }
 
-export interface WebviewInitData {
-  searchText: string;
-  mode: 'insert.favorites' | 'search' | 'view.all' | 'view.favorites';
+export type IconCodeType =
+  | 'svg'
+  | 'react'
+  | 'vue'
+  | 'tailwindcss'
+  | 'tailwindcss-react'
+  | 'iconify-icon'
+  | 'unplugin-icons'
+  | 'unocss'
+  | 'unocss-react';
+
+export interface SettingsData {
   favorTabs: string[];
   favorIcons: string[];
+  favorGroup: string;
+  codeType: IconCodeType;
+}
+
+export interface WebviewInitData extends SettingsData {
+  searchText: string;
+  mode: 'search' | 'view.all' | 'view.favor';
 }
