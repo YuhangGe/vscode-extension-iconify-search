@@ -12,10 +12,10 @@ This extension needs to read all icon data in the `@iconify/json` package. Pleas
 
 ## Features / 功能
 
-* 查看和搜索所有 Iconify 图标。
-* 收藏任何图标，并可以快捷查看所有收藏图标。
-* 将图标的代码拷贝到剪切板。
-* 直接将图标的代码插入到当前激活的文本编辑器。
+* View and search all Iconify icons. / 查看和搜索所有 Iconify 图标。
+* Favorite any icon and quickly view all favorite icons. / 收藏任何图标，并可以快捷查看所有收藏图标。
+* Copy the icon's code to the clipboard. / 将图标的代码拷贝到剪切板。
+* Insert the icon's code directly into the currently active text editor. / 直接将图标的代码插入到当前激活的文本编辑器。
 
 
 ## Screenshot / 录屏示例
