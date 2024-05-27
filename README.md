@@ -1,3 +1,19 @@
+<p align="center">
+<a href="https://iconify.design">
+<img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/logo.png?raw=true" alt="logo" width='128'/>
+</a>
+</p>
+
+<p align="center">
+<a href="https://marketplace.visualstudio.com/items?itemName=YuhangGe.vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/v/YuhangGe.vscode-extension-iconify-search.svg?color=blue&amp;label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=YuhangGe.vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/d/YuhangGe.vscode-extension-iconify-search.svg?color=4bdbe3" alt="Visual Studio Marketplace Downloads" /></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=YuhangGe.vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/i/YuhangGe.vscode-extension-iconify-search.svg?color=63ba83" alt="Visual Studio Marketplace Installs" /></a>
+<br/>
+<a href="https://github.com/antfu/vscode-iconify" target="__blank"><img src="https://img.shields.io/github/last-commit/YuhangGe/vscode-extension-iconify-search.svg?color=c977be" alt="GitHub last commit" /></a>
+<a href="https://github.com/YuhangGe/vscode-extension-iconify-search/issues" target="__blank"><img src="https://img.shields.io/github/issues/YuhangGe/vscode-extension-iconify-search.svg?color=a38eed" alt="GitHub issues" /></a>
+<a href="https://github.com/YuhangGe/vscode-extension-iconify-search" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/YuhangGe/vscode-extension-iconify-search?style=social"></a>
+</p>
+
 # Iconify Search
 
 Search [Iconify](https://icon-sets.iconify.design/) icons directly in VSCode and insert the icons into the code editor.
@@ -18,18 +34,37 @@ This extension needs to read all icon data in the `@iconify/json` package. Pleas
 * Insert the icon's code directly into the currently active text editor. / 直接将图标的代码插入到当前激活的文本编辑器。
 
 
-## Screenshot / 录屏示例
+## Screenshots / 录屏示例
 
 #### View All Icons / 查看全部图标
 
+<p align='center'>
+  <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/view.gif?raw=true" alt='View All Icons'>
+</p>
+
 #### Search Icons / 搜索图标
+
+<p align='center'>
+  <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/search.gif?raw=true" alt='Search Icons'>
+</p>
 
 #### Save to My Favorites / 收藏图标
 
+<p align='center'>
+  <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/favor.gif?raw=true" alt="Favorite Icons">
+</p>
+
 #### Copy Icon Code to Clipboard / 复制图标代码到剪贴板
+
+<p align='center'>
+  <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/copy.gif?raw=true" alt='Copy Icon Code to Clipboard'>
+</p>
 
 #### Insert Icon Code to Text Editor / 插入图标代码到文本
 
+<p align='center'>
+  <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/insert.gif?raw=true" alt='Insert Icon Code to Editor'>
+</p>
 
 ## Limitation / 限制
 
