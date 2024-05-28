@@ -15,7 +15,7 @@ export default defineConfig({
     }),
   ],
   define: {
-    'process.env.NODE_ENV': JSON.stringify('development'),
+    'process.env.NODE_ENV': JSON.stringify(watch ? 'development' : 'production'),
   },
   root: path.resolve(__dirname, '../src/iconifyWebView'),
   build: {

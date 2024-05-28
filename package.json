@@ -2,7 +2,7 @@
   "name": "iconify-search",
   "displayName": "Iconify Search",
   "description": "Search Iconify Icons in VS Code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icon": "resources/logo.png",
   "publisher": "geekabe",
   "private": true,
