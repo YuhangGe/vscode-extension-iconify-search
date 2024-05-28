@@ -4,7 +4,7 @@
   "description": "Search Iconify Icons in VS Code",
   "version": "0.0.1",
   "icon": "resources/logo.png",
-  "publisher": "YuhangGe",
+  "publisher": "geekabe",
   "private": true,
   "type": "module",
   "license": "MIT",
