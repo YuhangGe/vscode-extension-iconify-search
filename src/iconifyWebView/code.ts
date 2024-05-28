@@ -5,7 +5,7 @@ function dashToCamel(name: string) {
 }
 export function getIconCode(icon: Icon, type: IconCodeType) {
   if (type === 'tailwindcss-react' || type === 'tailwindcss') {
-    return `<span ${type === 'tailwindcss-react' ? 'className' : 'class'}="icon-[${icon.category}--${icon.name}]"></span>`;
+    return `<span ${type === 'tailwindcss-react' ? 'className' : 'class'}="icon${`-[${icon.category}--${icon.name}]`}"></span>`;
   } else if (type === 'unocss' || type === 'unocss-react') {
     return `<div ${type === 'unocss-react' ? 'className' : 'class'}="i-${icon.category}:${icon.name}"></div>`;
   } else if (type === 'iconify-icon') {

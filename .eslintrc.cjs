@@ -23,6 +23,7 @@ module.exports = {
   rules: {
     'import/order': 'error',
     'import/no-unresolved': 'off',
+    'prefer-template': 'error',
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
     'no-console': ['error', { allow: ['error'] }],

@@ -78,7 +78,15 @@ export const SettingsContent: FC<{
         <Select options={GroupOptions} mode='multiple' />
       </Form.Item>
       <Form.Item label={t('Default Open Tab')} name='favorGroup'>
-        <Select options={GroupOptions} placeholder={t('ALL')} allowClear />
+        <Select
+          options={GroupOptions}
+          showSearch
+          filterOption={(input: string, option?: { label: string; value: string }) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
+          placeholder={t('ALL')}
+          allowClear
+        />
       </Form.Item>
       <div className='flex justify-end gap-4'>
         <Button

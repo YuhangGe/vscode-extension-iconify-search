@@ -66,6 +66,13 @@ This extension needs to read all icon data in the `@iconify/json` package. Pleas
   <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/insert.gif?raw=true" alt='Insert Icon Code to Editor'>
 </p>
 
+#### User Friendly Settings / 便捷配置
+
+<p align='center'>
+  <img src="https://github.com/YuhangGe/vscode-extension-iconify-search/blob/main/resources/screenshots/settings.gif?raw=true" alt='User Friendly Settings'>
+</p>
+
+
 ## Limitation / 限制
 
 After switching from the Iconify Search Extension tab to other tabs (such as other text code tab), and executing Iconify Search Extension commands through VSCode Command again, it is unable to automatically active the Iconify Search Extension tab.
