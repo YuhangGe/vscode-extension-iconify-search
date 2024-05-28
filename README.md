@@ -5,11 +5,11 @@
 </p>
 
 <p align="center">
-<a href="https://marketplace.visualstudio.com/items?itemName=YuhangGe.vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/v/YuhangGe.vscode-extension-iconify-search.svg?color=blue&amp;label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
-<a href="https://marketplace.visualstudio.com/items?itemName=YuhangGe.vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/d/YuhangGe.vscode-extension-iconify-search.svg?color=4bdbe3" alt="Visual Studio Marketplace Downloads" /></a>
-<a href="https://marketplace.visualstudio.com/items?itemName=YuhangGe.vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/i/YuhangGe.vscode-extension-iconify-search.svg?color=63ba83" alt="Visual Studio Marketplace Installs" /></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=geekabe.iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/v/geekabe.iconify-search.svg?color=blue&amp;label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=geekabe.iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/d/geekabe.iconify-search.svg?color=4bdbe3" alt="Visual Studio Marketplace Downloads" /></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=geekabe.iconify-search" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/i/geekabe.iconify-search.svg?color=63ba83" alt="Visual Studio Marketplace Installs" /></a>
 <br/>
-<a href="https://github.com/antfu/vscode-iconify" target="__blank"><img src="https://img.shields.io/github/last-commit/YuhangGe/vscode-extension-iconify-search.svg?color=c977be" alt="GitHub last commit" /></a>
+<a href="https://github.com/YuhangGe/vscode-extension-iconify-search" target="__blank"><img src="https://img.shields.io/github/last-commit/YuhangGe/vscode-extension-iconify-search.svg?color=c977be" alt="GitHub last commit" /></a>
 <a href="https://github.com/YuhangGe/vscode-extension-iconify-search/issues" target="__blank"><img src="https://img.shields.io/github/issues/YuhangGe/vscode-extension-iconify-search.svg?color=a38eed" alt="GitHub issues" /></a>
 <a href="https://github.com/YuhangGe/vscode-extension-iconify-search" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/YuhangGe/vscode-extension-iconify-search?style=social"></a>
 </p>
